@@ -21,8 +21,8 @@ public class User extends Base{
 
     @ManyToMany
     @JoinTable(name = "role_user"
-            ,inverseJoinColumns = @JoinColumn(name = "id_user")
-            ,joinColumns = @JoinColumn(name = "id_role"))
+            ,joinColumns = @JoinColumn(name = "id_user")
+            ,inverseJoinColumns = @JoinColumn(name = "id_role"))
     private List<Role> roleList;
 
     @OneToMany(mappedBy = "user")
