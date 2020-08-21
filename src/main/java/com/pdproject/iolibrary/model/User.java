@@ -19,11 +19,9 @@ public class User extends Base{
     @Column(name = "avatar")
     private String avatar;
 
-    @ManyToMany
-    @JoinTable(name = "role_user"
-            ,joinColumns = @JoinColumn(name = "id_user")
-            ,inverseJoinColumns = @JoinColumn(name = "id_role"))
-    private List<Role> roleList;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "role", referencedColumnName = "id")
+    private Role role;
 
     @OneToMany(mappedBy = "user")
     private List<FileIO> fileIOList;
@@ -60,12 +58,12 @@ public class User extends Base{
         this.avatar = avatar;
     }
 
-    public List<Role> getRoleList() {
-        return roleList;
+    public Role getRole() {
+        return role;
     }
 
-    public void setRoleList(List<Role> roleList) {
-        this.roleList = roleList;
+    public void setRole(Role role) {
+        this.role = role;
     }
 
     public List<FileIO> getFileIOList() {
