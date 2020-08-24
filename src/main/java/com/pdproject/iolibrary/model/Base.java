@@ -4,12 +4,14 @@ import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Date;
 
 @MappedSuperclass
+@EnableJpaAuditing
 public abstract class Base {
 
     @Id
@@ -24,7 +26,7 @@ public abstract class Base {
     @LastModifiedDate
     private Timestamp modifyDate;
 
-    @Column(name = "create_by")
+    @Column(name = "create_by", insertable = false, updatable = false)
     @CreatedBy
     private Integer createBy;
 
