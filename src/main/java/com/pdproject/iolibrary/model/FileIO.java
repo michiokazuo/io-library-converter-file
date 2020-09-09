@@ -5,7 +5,7 @@ import java.io.File;
 
 @Entity
 @Table(name = "file")
-public class FileIO extends Base{
+public class FileIO extends Base {
 
     @Column(name = "filename")
     private String filename;

@@ -1,6 +1,6 @@
 package com.pdproject.iolibrary.config;
 
-import com.pdproject.iolibrary.service.UserDetailsServiceImpl;
+import com.pdproject.iolibrary.service_impl.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,7 +9,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.social.security.SpringSocialConfigurer;
 
 @Configuration
 @EnableWebSecurity
@@ -19,7 +18,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private UserDetailsServiceImpl userDetailsService;
 
     @Bean
-    public BCryptPasswordEncoder passwordEncoder(){
+    public BCryptPasswordEncoder passwordEncoder() {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         return passwordEncoder;
     }
@@ -35,7 +34,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable();
 
         // cho phép tất cả các request truy cập
-        http.authorizeRequests().antMatchers("/","/home","/signup","/login","/logout","/403").permitAll();
+        http.authorizeRequests().antMatchers("/", "/home", "/login", "/logout", "/403").permitAll();
 
         // chỉ cho phép người dùng đã đăng nhập với quền user hoặc admin truy cập
         http.authorizeRequests().antMatchers("/user/**").access("hasAnyRole('ROLE_USER','ROLE_ADMIN')");
@@ -56,8 +55,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .usernameParameter("username")
                 .passwordParameter("password")
                 .and().logout().logoutUrl("/logout").logoutSuccessUrl("/home");
-
-        http.apply(new SpringSocialConfigurer()).signupUrl("/signup");
 
         // cấu hình remember me, thời gian 1296000 giây
         http.rememberMe().key("iolibrary").tokenValiditySeconds(1296000);

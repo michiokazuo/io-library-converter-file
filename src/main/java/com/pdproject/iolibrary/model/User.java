@@ -5,7 +5,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "user")
-public class User extends Base{
+public class User extends Base {
 
     @Column(name = "name")
     private String name;

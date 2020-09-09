@@ -14,21 +14,21 @@ import java.security.Principal;
 //@RequestMapping(value = {"/home"})
 public class MainController {
 
-    @GetMapping(value = {"/","/home"})
-    public String homePage(){
+    @GetMapping(value = {"/", "/home"})
+    public String homePage() {
         return "index";
     }
 
     @GetMapping(value = "/login")
-    public String loginPage(Model model,@RequestParam(name = "error", required = false) String error) {
-        if (error != null && error.equals("true")){
-            model.addAttribute("error","true");
+    public String loginPage(Model model, @RequestParam(name = "error", required = false) String error) {
+        if (error != null && error.equals("true")) {
+            model.addAttribute("error", "true");
         }
         return "login";
     }
 
     @GetMapping(value = "/user/user-info")
-    public String userInfoPage(Model model, Principal principal){
+    public String userInfoPage(Model model, Principal principal) {
         User user = (User) ((Authentication) principal).getPrincipal();
         model.addAttribute("email", user.getUsername());
         model.addAttribute("role", user.getAuthorities().stream().findFirst().get().getAuthority());
@@ -36,7 +36,7 @@ public class MainController {
     }
 
     @GetMapping(value = "/admin/admin-page")
-    public String adminPage(Model model, Principal principal){
+    public String adminPage(Model model, Principal principal) {
         User user = (User) ((Authentication) principal).getPrincipal();
         model.addAttribute("email", user.getUsername());
         model.addAttribute("role", user.getAuthorities().stream().findFirst().get().getAuthority());
@@ -44,7 +44,7 @@ public class MainController {
     }
 
     @GetMapping(value = "/403")
-    public String page403(){
+    public String page403() {
         return "403page";
     }
 }

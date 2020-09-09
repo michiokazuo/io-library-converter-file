@@ -5,18 +5,18 @@
     <title>Title</title>
 </head>
 <body>
-    <h1>Login Form</h1>
-    <p style="color: red;" th:if="${error != null}" th:utext="${'Tai khoan hoac mat khau khong dung!!!'}"></p>
-    <form action="/security-login" method="post">
-        <label>Email</label>
-        <input type="text" name="username"/>
-        <br>
-        <label>Password</label>
-        <input type="text" name="password"/>
-        <br>
-        <input type="checkbox" name="remember-me">
-        <label>Remember me</label>
-        <button type="submit">Login</button>
-    </form>
+<h1>Login Form</h1>
+<p style="color: red;" th:if="${error != null}" th:utext="${'Tai khoan hoac mat khau khong dung!!!'}"></p>
+<form action="/security-login" method="post">
+    <label>Email</label>
+    <input type="text" name="username"/>
+    <br>
+    <label>Password</label>
+    <input type="text" name="password"/>
+    <br>
+    <input type="checkbox" name="remember-me">
+    <label>Remember me</label>
+    <button type="submit">Login</button>
+</form>
 </body>
 </html>
