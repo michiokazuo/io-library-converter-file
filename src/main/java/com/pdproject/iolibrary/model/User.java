@@ -5,7 +5,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "user")
-public class User extends Base{
+public class User extends Base {
 
     @Column(name = "name")
     private String name;
@@ -19,7 +19,7 @@ public class User extends Base{
     @Column(name = "avatar")
     private String avatar;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role", referencedColumnName = "id")
     private Role role;
 
