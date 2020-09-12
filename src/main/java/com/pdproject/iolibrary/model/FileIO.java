@@ -11,11 +11,7 @@ public class FileIO extends Base {
     private String filename;
 
     @Column(name = "content")
-    private File content;
-
-    @ManyToOne
-    @JoinColumn(name = "create_by", referencedColumnName = "id")
-    private User user;
+    private byte[] content;
 
     public String getFilename() {
         return filename;
@@ -25,11 +21,11 @@ public class FileIO extends Base {
         this.filename = filename;
     }
 
-    public File getContent() {
+    public byte[] getContent() {
         return content;
     }
 
-    public void setContent(File content) {
+    public void setContent(byte[] content) {
         this.content = content;
     }
 }
