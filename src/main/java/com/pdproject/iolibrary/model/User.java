@@ -23,7 +23,8 @@ public class User extends Base {
     @JoinColumn(name = "role", referencedColumnName = "id")
     private Role role;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "create_by")
     private List<FileIO> fileIOList;
 
     public String getName() {

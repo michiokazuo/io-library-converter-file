@@ -4,14 +4,14 @@ import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Date;
 
 @MappedSuperclass
-@EnableJpaAuditing
+@EntityListeners(AuditingEntityListener.class)
 public abstract class Base {
 
     @Id
@@ -26,13 +26,15 @@ public abstract class Base {
     @LastModifiedDate
     private Timestamp modifyDate;
 
-    @Column(name = "create_by", insertable = false, updatable = false)
+    @ManyToOne
+    @JoinColumn(name = "create_by")
     @CreatedBy
-    private Integer createBy;
+    private User createBy;
 
-    @Column(name = "modify_by")
+    @ManyToOne
+    @JoinColumn(name = "modify_by")
     @LastModifiedBy
-    private Integer modifyBy;
+    private User modifyBy;
 
     @Column(name = "enabled")
     private Boolean enabled;
@@ -61,19 +63,19 @@ public abstract class Base {
         this.modifyDate = modifyDate;
     }
 
-    public Integer getCreateBy() {
+    public User getCreateBy() {
         return createBy;
     }
 
-    public void setCreateBy(Integer createBy) {
+    public void setCreateBy(User createBy) {
         this.createBy = createBy;
     }
 
-    public Integer getModifyBy() {
+    public User getModifyBy() {
         return modifyBy;
     }
 
-    public void setModifyBy(Integer modifyBy) {
+    public void setModifyBy(User modifyBy) {
         this.modifyBy = modifyBy;
     }
 

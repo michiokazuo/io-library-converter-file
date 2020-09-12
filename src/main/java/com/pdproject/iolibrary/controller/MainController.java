@@ -1,5 +1,7 @@
 package com.pdproject.iolibrary.controller;
 
+import com.pdproject.iolibrary.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
@@ -14,9 +16,17 @@ import java.security.Principal;
 //@RequestMapping(value = {"/home"})
 public class MainController {
 
+    @Autowired
+    private UserService userService;
+
     @GetMapping(value = {"/", "/home"})
     public String homePage() {
         return "index";
+    }
+
+    @GetMapping(value = "/test")
+    public String testPage(){
+        return "test";
     }
 
     @GetMapping(value = "/login")
@@ -32,6 +42,8 @@ public class MainController {
         User user = (User) ((Authentication) principal).getPrincipal();
         model.addAttribute("email", user.getUsername());
         model.addAttribute("role", user.getAuthorities().stream().findFirst().get().getAuthority());
+        com.pdproject.iolibrary.model.User u = userService.findByEmail(user.getUsername());
+        model.addAttribute("numberOfFiles",u.getFileIOList().size());
         return "user_info";
     }
 

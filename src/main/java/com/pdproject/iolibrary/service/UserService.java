@@ -14,4 +14,6 @@ public interface UserService {
     User update(User user) throws SQLException;
 
     User findAll() throws SQLException; // admin
+
+    User findByEmail(String email);
 }
