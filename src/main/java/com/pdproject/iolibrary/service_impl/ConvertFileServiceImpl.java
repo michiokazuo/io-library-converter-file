@@ -37,16 +37,16 @@ public class ConvertFileServiceImpl implements ConvertFileService {
         File fileResult;
         Integer numberOfFiles = conversionResult.fileCount();
 
-        if (numberOfFiles == 1){
+        if (numberOfFiles == 1) {
             ConversionResultFile conversionResultFile = conversionResult.getFile(0);
             fileResult = new File(DIR_SAVE + "/" + conversionResultFile.getName());
             FileOutputStream outputStream = new FileOutputStream(fileResult);
             IOUtils.copy(conversionResultFile.asStream().get(), outputStream);
             outputStream.close();
-        }else {
+        } else {
             fileResult = new File(DIR_SAVE + "/" + nameFile + ".zip");
             ZipOutputStream zipOut = new ZipOutputStream(new FileOutputStream(fileResult));
-            for (int i = 0; i < numberOfFiles; i++){
+            for (int i = 0; i < numberOfFiles; i++) {
                 ConversionResultFile conversionResultFile = conversionResult.getFile(i);
                 ZipEntry zipEntry = new ZipEntry(conversionResultFile.getName());
                 zipOut.putNextEntry(zipEntry);
@@ -69,14 +69,14 @@ public class ConvertFileServiceImpl implements ConvertFileService {
         Config.setDefaultSecret(CONVERT_API_SECRET);
         ConversionResult conversionResult =
                 ConvertApi
-                    .convert(fromFormat, toFormat, new Param("file", file.getInputStream(), fileName))
-                    .get();
+                        .convert(fromFormat, toFormat, new Param("file", file.getInputStream(), fileName))
+                        .get();
 
 
         File fileResult = getDataForFileIO(conversionResult, nameFile);
 
         FileIO fileIOResult = new FileIO();
-        fileIOResult.setFilename(fileResult.getName());
+        fileIOResult.setFilename((toFormat.equals("compress") ? "(Compressed) " : "(Converted) ") + fileResult.getName());
         fileIOResult.setContent(Files.readAllBytes(fileResult.toPath()));
 
         System.out.println(fileResult.delete() ? "Đã xóa File converted" : "Xóa file converted thất bại");
@@ -96,15 +96,14 @@ public class ConvertFileServiceImpl implements ConvertFileService {
                 ConvertApi
                         .convert(fromFormat, toFormat,
                                 new Param("file", file.getInputStream(), fileName),
-                                new Param("PdfUserPassword", password),
-                                new Param("PdfOwnerPassword", password))
+                                new Param(toFormat.equals("encrypt") ? "PdfUserPasswordNew" : "Password", password))
                         .get();
 
 
         File fileResult = getDataForFileIO(conversionResult, nameFile);
 
         FileIO fileIOResult = new FileIO();
-        fileIOResult.setFilename(fileResult.getName());
+        fileIOResult.setFilename((toFormat.equals("encrypt") ? "(Encrypted) " : "(Decrypted) ") + fileResult.getName());
         fileIOResult.setContent(Files.readAllBytes(fileResult.toPath()));
         fileIOResult.setCreateDate(new Timestamp(System.currentTimeMillis()));
         fileIOResult.setModifyDate(new Timestamp(System.currentTimeMillis()));
