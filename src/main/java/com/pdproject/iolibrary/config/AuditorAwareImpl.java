@@ -16,6 +16,6 @@ public class AuditorAwareImpl implements AuditorAware<User> {
     @Override
     public Optional<User> getCurrentAuditor() {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        return Optional.ofNullable(userRepository.findByEmail(username));
+        return Optional.ofNullable(userRepository.findByEmailAndEnabledIsTrue(username));
     }
 }

@@ -10,6 +10,6 @@ public class PasswordConfirmValidator implements ConstraintValidator<PasswordCon
     @Override
     public boolean isValid(Object o, ConstraintValidatorContext constraintValidatorContext) {
         UserDTO userDTO = (UserDTO) o;
-        return userDTO.getPassword() == null ? true : userDTO.getPassword().equals(userDTO.getPasswordConfirm());
+        return userDTO.getPassword().equals(userDTO.getPasswordConfirm());
     }
 }

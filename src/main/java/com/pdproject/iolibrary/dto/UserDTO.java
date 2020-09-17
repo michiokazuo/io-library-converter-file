@@ -2,7 +2,6 @@ package com.pdproject.iolibrary.dto;
 
 import com.pdproject.iolibrary.anotation.PasswordConfirm;
 import com.pdproject.iolibrary.anotation.ValidEmail;
-import com.pdproject.iolibrary.model.Role;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
@@ -37,6 +36,4 @@ public class UserDTO extends BaseDTO{
     private String avatar;
 
     private List<FileDTO> fileDTOList;
-
-    private Role role;
 }

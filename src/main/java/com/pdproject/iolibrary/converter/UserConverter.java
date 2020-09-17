@@ -22,11 +22,19 @@ public class UserConverter implements Converter<User, UserDTO> {
     @Override
     public UserDTO toDTO(User user) {
         UserDTO userDTO = modelMapper.map(user, UserDTO.class);
-        userDTO.setPassword(null);
+        userDTO.setPassword("********");
+        userDTO.setPasswordConfirm("********");
         if (user.getFileIOList() != null){
             List<FileDTO> fileDTOList =
                     user.getFileIOList().stream()
-                            .map(fileIO -> converter.toDTO(fileIO))
+                            .map(fileIO -> {
+                                try {
+                                    return converter.toDTO(fileIO);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                    return null;
+                                }
+                            })
                             .collect(Collectors.toList());
             userDTO.setFileDTOList(fileDTOList);
         }
