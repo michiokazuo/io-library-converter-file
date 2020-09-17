@@ -4,6 +4,7 @@ import com.pdproject.iolibrary.model.FileIO;
 import com.pdproject.iolibrary.model.JsonResult;
 import com.pdproject.iolibrary.repository.FileIORepository;
 import com.pdproject.iolibrary.service.ConvertFileService;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
@@ -18,7 +19,8 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 
 @RestController
-@RequestMapping(path = "/api/v1/convert/*")
+@AllArgsConstructor
+@RequestMapping(path = "/api/v1/public/convert/*")
 public class FileController {
 
     @Autowired

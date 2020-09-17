@@ -1,5 +1,6 @@
 package com.pdproject.iolibrary.model;
 
+import lombok.Data;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -10,6 +11,7 @@ import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Date;
 
+@Data
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 public abstract class Base {
@@ -26,64 +28,16 @@ public abstract class Base {
     @LastModifiedDate
     private Timestamp modifyDate;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "create_by")
     @CreatedBy
     private User createBy;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "modify_by")
     @LastModifiedBy
     private User modifyBy;
 
     @Column(name = "enabled")
     private Boolean enabled;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Date getCreateDate() {
-        return createDate;
-    }
-
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
-    }
-
-    public Timestamp getModifyDate() {
-        return modifyDate;
-    }
-
-    public void setModifyDate(Timestamp modifyDate) {
-        this.modifyDate = modifyDate;
-    }
-
-    public User getCreateBy() {
-        return createBy;
-    }
-
-    public void setCreateBy(User createBy) {
-        this.createBy = createBy;
-    }
-
-    public User getModifyBy() {
-        return modifyBy;
-    }
-
-    public void setModifyBy(User modifyBy) {
-        this.modifyBy = modifyBy;
-    }
-
-    public Boolean getEnabled() {
-        return enabled;
-    }
-
-    public void setEnabled(Boolean enabled) {
-        this.enabled = enabled;
-    }
 }

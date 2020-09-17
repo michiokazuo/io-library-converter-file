@@ -1,19 +1,20 @@
 package com.pdproject.iolibrary.service;
 
+import com.pdproject.iolibrary.dto.UserDTO;
 import com.pdproject.iolibrary.model.User;
 
 import java.sql.SQLException;
+import java.util.List;
 
 public interface UserService {
-    User signIn(String email, String password) throws SQLException;
 
-    User signUp(User user) throws SQLException;
+    UserDTO insert(UserDTO userDTO) throws SQLException;
 
-    User delete(int id) throws SQLException;
+    boolean delete(int id) throws SQLException;
 
-    User update(User user) throws SQLException;
+    UserDTO update(UserDTO userDTO) throws SQLException;
 
-    User findAll() throws SQLException; // admin
+    List<UserDTO> findAll() throws SQLException;
 
-    User findByEmail(String email);
+    UserDTO findByEmail(String email) throws SQLException;
 }
