@@ -2,17 +2,15 @@ package com.pdproject.iolibrary.controller.api;
 
 import com.pdproject.iolibrary.dto.UserDTO;
 import com.pdproject.iolibrary.model.ResponseMessage;
-import com.pdproject.iolibrary.model.User;
 import com.pdproject.iolibrary.service.UserService;
+import com.pdproject.iolibrary.utils.FileUtils;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
-import java.sql.SQLException;
+import java.io.IOException;
 
 @RestController
 @AllArgsConstructor
@@ -23,11 +21,13 @@ public class UserController {
 
     private ResponseMessage responseMessage;
 
+    private FileUtils fileUtils;
+
     @GetMapping(value = "/find-all")
     public ResponseMessage findAllUsers(){
         try {
             responseMessage = responseMessage.successResponse("success",userService.findAll());
-        } catch (SQLException throwables) {
+        } catch (Exception throwables) {
             throwables.printStackTrace();
             responseMessage = responseMessage.faildResponse("Get all user faild");
         }
@@ -38,9 +38,20 @@ public class UserController {
     public ResponseMessage findByEmail(@PathVariable(name = "email") String email){
         try {
             responseMessage = responseMessage.successResponse("success",userService.findByEmail(email));
-        } catch (SQLException throwables) {
+        } catch (Exception throwables) {
             throwables.printStackTrace();
             responseMessage = responseMessage.faildResponse("Don't exists email : " + email);
+        }
+        return responseMessage;
+    }
+
+    @GetMapping(value = "/find-by-id/{id}")
+    public ResponseMessage findById(@PathVariable(name = "id") int id){
+        try {
+            responseMessage = responseMessage.successResponse("success",userService.findById(id));
+        } catch (Exception throwables) {
+            throwables.printStackTrace();
+            responseMessage = responseMessage.faildResponse("Don't exists user with id : " + id);
         }
         return responseMessage;
     }
@@ -53,11 +64,23 @@ public class UserController {
         }
         try {
             userResult = userService.insert(userDTO);
-        } catch (SQLException throwables) {
+        } catch (Exception throwables) {
             throwables.printStackTrace();
             responseMessage = responseMessage.faildResponse("Insert user faild");
         }
         return userResult != null ? responseMessage.successResponse("success", userResult) : responseMessage.faildResponse("Exists email");
+    }
+
+    @DeleteMapping(value = "/delete/{id}")
+    public ResponseMessage deleteUser(@PathVariable(name = "id") int id){
+        try {
+            if(userService.delete(id)){
+                return responseMessage.successResponse("success",null);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return responseMessage.faildResponse("Dont exist user with id : " + id);
     }
 
     @PutMapping(value = "/update")
@@ -68,7 +91,7 @@ public class UserController {
         }
         try {
             userResult = userService.update(userDTO);
-        } catch (SQLException throwables) {
+        } catch (Exception throwables) {
             throwables.printStackTrace();
             responseMessage = responseMessage.faildResponse("Insert user faild");
         }
@@ -77,7 +100,13 @@ public class UserController {
 
     @PostMapping(value = "/upload-avatar")
     public ResponseMessage uploadAvatar(@RequestParam("avatar") MultipartFile avatar){
-        return responseMessage.successResponse("success", avatar.getOriginalFilename());
+        try {
+            fileUtils.storeFile(avatar);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return responseMessage.faildResponse("Store file error");
+        }
+        return responseMessage.successResponse("success", fileUtils);
     }
 
 }

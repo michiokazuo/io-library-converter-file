@@ -7,15 +7,12 @@ import com.pdproject.iolibrary.service.ConvertFileService;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.nio.file.Files;
-import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.util.concurrent.ExecutionException;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -78,6 +75,7 @@ public class ConvertFileServiceImpl implements ConvertFileService {
         FileIO fileIOResult = new FileIO();
         fileIOResult.setFilename(fileResult.getName());
         fileIOResult.setContent(Files.readAllBytes(fileResult.toPath()));
+        fileIOResult.setEnabled(true);
 
         System.out.println(fileResult.delete() ? "Đã xóa File converted" : "Xóa file converted thất bại");
 
@@ -106,8 +104,6 @@ public class ConvertFileServiceImpl implements ConvertFileService {
         FileIO fileIOResult = new FileIO();
         fileIOResult.setFilename(fileResult.getName());
         fileIOResult.setContent(Files.readAllBytes(fileResult.toPath()));
-        fileIOResult.setCreateDate(new Timestamp(System.currentTimeMillis()));
-        fileIOResult.setModifyDate(new Timestamp(System.currentTimeMillis()));
         fileIOResult.setEnabled(true);
 
         System.out.println(fileResult.delete() ? "Đã xóa File converted" : "Xóa file converted thất bại");
