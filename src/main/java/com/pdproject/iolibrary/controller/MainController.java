@@ -42,8 +42,6 @@ public class MainController {
         User user = (User) ((Authentication) principal).getPrincipal();
         model.addAttribute("email", user.getUsername());
         model.addAttribute("role", user.getAuthorities().stream().findFirst().get().getAuthority());
-        com.pdproject.iolibrary.model.User u = userService.findByEmail(user.getUsername());
-        model.addAttribute("numberOfFiles",u.getFileIOList().size());
         return "user_info";
     }
 

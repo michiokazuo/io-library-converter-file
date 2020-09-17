@@ -2,6 +2,7 @@ package com.pdproject.iolibrary.controller.api;
 
 import com.pdproject.iolibrary.model.FileIO;
 import com.pdproject.iolibrary.service.ConvertFileService;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
@@ -14,10 +15,10 @@ import org.springframework.web.multipart.MultipartFile;
 import java.net.URLEncoder;
 
 @RestController
-@RequestMapping(path = "/api/v1/convert/*")
+@AllArgsConstructor
+@RequestMapping(path = "/api/v1/public/convert/*")
 public class FileController {
     
-    @Autowired
     private ConvertFileService convertFileService;
 
     @PostMapping(value = "to")
