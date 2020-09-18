@@ -17,94 +17,94 @@ import java.io.IOException;
 @RequestMapping(path = "/api/v1/public/user/*")
 public class UserController {
 
-    private UserService userService;
+    private final UserService userService;
 
     private ResponseMessage responseMessage;
 
-    private FileUtils fileUtils;
+    private final FileUtils fileUtils;
 
     @GetMapping(value = "/find-all")
-    public ResponseMessage findAllUsers(){
+    public ResponseMessage findAllUsers() {
         try {
-            responseMessage = responseMessage.successResponse("success",userService.findAll());
+            responseMessage = responseMessage.successResponse("success", userService.findAll());
         } catch (Exception throwables) {
             throwables.printStackTrace();
-            responseMessage = responseMessage.faildResponse("Get all user faild");
+            responseMessage = responseMessage.failResponse("Get all user fail");
         }
         return responseMessage;
     }
 
     @GetMapping(value = "/find-by-email/{email}")
-    public ResponseMessage findByEmail(@PathVariable(name = "email") String email){
+    public ResponseMessage findByEmail(@PathVariable(name = "email") String email) {
         try {
-            responseMessage = responseMessage.successResponse("success",userService.findByEmail(email));
+            responseMessage = responseMessage.successResponse("success", userService.findByEmail(email));
         } catch (Exception throwables) {
             throwables.printStackTrace();
-            responseMessage = responseMessage.faildResponse("Don't exists email : " + email);
+            responseMessage = responseMessage.failResponse("Don't exists email : " + email);
         }
         return responseMessage;
     }
 
     @GetMapping(value = "/find-by-id/{id}")
-    public ResponseMessage findById(@PathVariable(name = "id") int id){
+    public ResponseMessage findById(@PathVariable(name = "id") int id) {
         try {
-            responseMessage = responseMessage.successResponse("success",userService.findById(id));
+            responseMessage = responseMessage.successResponse("success", userService.findById(id));
         } catch (Exception throwables) {
             throwables.printStackTrace();
-            responseMessage = responseMessage.faildResponse("Don't exists user with id : " + id);
+            responseMessage = responseMessage.failResponse("Don't exists user with id : " + id);
         }
         return responseMessage;
     }
 
     @PostMapping(value = "/register")
-    public ResponseMessage registerUser(@RequestBody @Valid UserDTO userDTO, BindingResult result){
+    public ResponseMessage registerUser(@RequestBody @Valid UserDTO userDTO, BindingResult result) {
         UserDTO userResult = null;
-        if (result.hasErrors()){
-            return responseMessage.faildResponse("Error validate value");
+        if (result.hasErrors()) {
+            return responseMessage.failResponse("Error validate value");
         }
         try {
             userResult = userService.insert(userDTO);
         } catch (Exception throwables) {
             throwables.printStackTrace();
-            responseMessage = responseMessage.faildResponse("Insert user faild");
+            responseMessage = responseMessage.failResponse("Insert user fail");
         }
-        return userResult != null ? responseMessage.successResponse("success", userResult) : responseMessage.faildResponse("Exists email");
+        return userResult != null ? responseMessage.successResponse("success", userResult) : responseMessage.failResponse("Exists email");
     }
 
     @DeleteMapping(value = "/delete/{id}")
-    public ResponseMessage deleteUser(@PathVariable(name = "id") int id){
+    public ResponseMessage deleteUser(@PathVariable(name = "id") int id) {
         try {
-            if(userService.delete(id)){
-                return responseMessage.successResponse("success",null);
+            if (userService.delete(id)) {
+                return responseMessage.successResponse("success", null);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return responseMessage.faildResponse("Dont exist user with id : " + id);
+        return responseMessage.failResponse("Dont exist user with id : " + id);
     }
 
     @PutMapping(value = "/update")
-    public ResponseMessage updateUser(@RequestBody @Valid UserDTO userDTO, BindingResult result){
+    public ResponseMessage updateUser(@RequestBody @Valid UserDTO userDTO, BindingResult result) {
         UserDTO userResult = null;
-        if (result.hasErrors()){
-            return responseMessage.faildResponse("Error validate value");
+        if (result.hasErrors()) {
+            return responseMessage.failResponse("Error validate value");
         }
         try {
             userResult = userService.update(userDTO);
         } catch (Exception throwables) {
             throwables.printStackTrace();
-            responseMessage = responseMessage.faildResponse("Insert user faild");
+            responseMessage = responseMessage.failResponse("Insert user fail");
         }
-        return userResult != null ? responseMessage.successResponse("success", userResult) : responseMessage.faildResponse("Exists email");
+        return userResult != null ? responseMessage.successResponse("success", userResult) : responseMessage.failResponse("Exists email");
     }
 
     @PostMapping(value = "/upload-avatar")
-    public ResponseMessage uploadAvatar(@RequestParam("avatar") MultipartFile avatar){
+    public ResponseMessage uploadAvatar(@RequestParam("avatar") MultipartFile avatar) {
         try {
             fileUtils.storeFile(avatar);
         } catch (IOException e) {
             e.printStackTrace();
-            return responseMessage.faildResponse("Store file error");
+            return responseMessage.failResponse("Store file error");
         }
         return responseMessage.successResponse("success", fileUtils);
     }

@@ -10,17 +10,17 @@ import org.springframework.context.annotation.Configuration;
 public class WebConfig {
 
     @Bean
-    public ModelMapper modelMapper(){
+    public ModelMapper modelMapper() {
         return new ModelMapper();
     }
 
     @Bean
-    public ResponseMessage responseMessage(){
+    public ResponseMessage responseMessage() {
         return new ResponseMessage();
     }
 
     @Bean
-    public FileUtils fileUtils(){
+    public FileUtils fileUtils() {
         return new FileUtils();
     }
 

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class FileConverter implements Converter<FileIO, FileDTO> {
 
-    private ModelMapper modelMapper;
+    private final ModelMapper modelMapper;
 
     @Override
     public FileDTO toDTO(FileIO fileIO) {
