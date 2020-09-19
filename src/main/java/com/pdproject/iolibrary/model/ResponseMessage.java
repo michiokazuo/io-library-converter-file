@@ -16,7 +16,7 @@ public class ResponseMessage {
         return new ResponseMessage(message, data);
     }
 
-    public ResponseMessage faildResponse(String message) {
+    public ResponseMessage failResponse(String message) {
         return new ResponseMessage(message, null);
     }
 }
