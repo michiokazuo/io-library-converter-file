@@ -13,15 +13,19 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.security.Principal;
 
 @Controller
-//@RequestMapping(value = {"/home"})
 public class MainController {
 
     @Autowired
     private UserService userService;
 
-    @GetMapping(value = {"/", "/home"})
+    @GetMapping(value = {"/"})
     public String homePage() {
         return "index";
+    }
+
+    @GetMapping(value = {"/home"})
+    public String homePage2() {
+        return "home";
     }
 
     @GetMapping(value = "/test")

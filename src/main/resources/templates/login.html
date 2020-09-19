@@ -1,27 +1,102 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Login Page</title>
+    <th:block th:replace="~{/fragment/app-fragment :: head-resource}"></th:block>
 </head>
 <body>
-<h1>Login Form</h1>
-<p style="color: red;" th:if="${error != null}" th:utext="${'Tai khoan hoac mat khau khong dung!!!'}"></p>
-<form action="/security-login" method="post">
-    <label>Email</label>
-    <input type="text" name="username"/>
-    <br>
-    <label>Password</label>
-    <input type="text" name="password"/>
-    <br>
-    <input type="checkbox" name="remember-me">
-    <label>Remember me</label>
-    <button type="submit">Login</button>
-</form>
+    <menu th:replace="~{/fragment/app-fragment :: menu}"></menu>
+    <div class="modal fade" id="modal-forgot-password" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Forgot your password</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="email-forgot-password" class="col-form-label">Your email :</label>
+                            <input type="email" class="form-control" id="email-forgot-password" placeholder="Enter email">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-<script>
+    <div class="modal fade" id="modal-register" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="">Sign up</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="email-sign-up" class="col-form-label">Email :</label>
+                                    <input type="email" class="form-control" id="email-sign-up" placeholder="Enter email">
+                                </div>
+                                <div class="form-group">
+                                    <label for="password-sign-up" class="col-form-label">Password :</label>
+                                    <input type="password" class="form-control" id="password-sign-up" placeholder="Enter password">
+                                </div>
+                                <div class="form-group">
+                                    <label for="password-confirm" class="col-form-label">Confirm password :</label>
+                                    <input type="password" class="form-control" id="password-confirm" placeholder="Enter password again">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label>Avatar</label>
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" id="avatar" onchange="reloadImage()">
+                                    <label for="avatar" class="custom-file-label">Select Avatar</label>
+                                </div>
+                                <img src="../static/file/user-avatar.png" id="avatar-photo" class="border rounded mt-3" alt="avatar" style="width: 200px;">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary">Sign up</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-</script>
-
+    <main class="container p-5">
+        <form class="col-md-8 m-auto shadow pb-4 rounded">
+            <h2 class="text-center p-3">Login</h2>
+            <div class="form-group">
+                <label for="email">Email address</label>
+                <input type="email" class="form-control" id="email" placeholder="Enter email">
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" id="password" placeholder="Enter password">
+            </div>
+            <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" id="remember-me">
+                <label class="custom-control-label" for="remember-me">Remember me</label>
+            </div>
+            <button type="submit" class="btn btn-primary mt-3 mb-3">Login</button>
+            <div>
+                <a href="#" data-toggle="modal" data-target="#modal-forgot-password">Forgot password?</a>
+                <a href="#" data-toggle="modal" data-target="#modal-register">Don't have account?</a>
+            </div>
+        </form>
+    </main>
+    <footer th:replace="~{/fragment/app-fragment :: footer}"></footer>
+    <script th:src="@{/js/login.js}"></script>
 </body>
 </html>

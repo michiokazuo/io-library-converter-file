@@ -5,12 +5,15 @@ import com.pdproject.iolibrary.model.ResponseMessage;
 import com.pdproject.iolibrary.service.UserService;
 import com.pdproject.iolibrary.utils.FileUtils;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.io.IOException;
+import java.security.Principal;
 
 @RestController
 @AllArgsConstructor
@@ -82,7 +85,7 @@ public class UserController {
         }
         return responseMessage.failResponse("Dont exist user with id : " + id);
     }
-
+  
     @PutMapping(value = "/update")
     public ResponseMessage updateUser(@RequestBody @Valid UserDTO userDTO, BindingResult result) {
         UserDTO userResult = null;
@@ -107,6 +110,23 @@ public class UserController {
             return responseMessage.failResponse("Store file error");
         }
         return responseMessage.successResponse("success", fileUtils);
+    }
+
+    @GetMapping(value = "/login-success")
+    public ResponseMessage loginSuccess(Principal principal){
+        User user = (User) ((Authentication) principal).getPrincipal();
+        UserDTO userDTO = null;
+        try {
+            userDTO = userService.findByEmail(user.getUsername());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return responseMessage.successResponse("login success", userDTO);
+    }
+
+    @GetMapping(value = "/login-fail")
+    public ResponseMessage loginFail(){
+        return responseMessage.faildResponse("Username or Password incorrect");
     }
 
 }
