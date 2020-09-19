@@ -2,12 +2,109 @@
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <title>Home Page</title>
+    <link rel="stylesheet" th:href="@{/css/home.css}">
     <th:block th:replace="~{/fragment/app-fragment :: head-resource}"></th:block>
 </head>
 <body>
-    <header th:replace="~{/fragment/app-fragment :: header}"></header>
     <menu th:replace="~{/fragment/app-fragment :: menu}"></menu>
+    <main class="container mt-5 mb-5 pt-3 pb-3 rounded shadow">
+        <div class="row">
+            <div class="col-md-4 border border-left-0 border-top-0 border-bottom-0">
+                <div class="user-info p-2 rounded shadow">
+                    <img src="logo.jpg" class="rounded-circle" alt="" width="50px">
+                    <span class="ml-2 text-success">Minh Vu</span>
+                </div>
+                <div class="list-file mt-3 p-2 rounded shadow">
+                    <div class="bar-title d-flex justify-content-between" data-toggle="collapse" data-target="#collapseFiles" aria-expanded="false" aria-controls="collapseExample">
+                        <span><i class="fas fa-list-ul"></i><span class="ml-2">Your Files</span></span>
+                        <span><i class="fas fa-sort"></i></span>
+                    </div>
+                    <div class="collapse" id="collapseFiles">
+                        <hr>
+                        <ul class="nav nav-tabs flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">
+                                    <i class="far fa-file-pdf text-danger"></i>
+                                    <span class="ml-2 text-dark">filename.pdf</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">
+                                    <i class="far fa-file-pdf text-danger"></i>
+                                    <span class="ml-2 text-dark">filename.pdf</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">
+                                    <i class="far fa-file-pdf text-danger"></i>
+                                    <span class="ml-2 text-dark">filename.pdf</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">
+                                    <i class="far fa-file-pdf text-danger"></i>
+                                    <span class="ml-2 text-dark">filename.pdf</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="row">
+                    <a href="#" class="option text-decoration-none col-sm-3">
+                        <div class="p-3 shadow-sm rounded mt-2">
+                            <span class="icon"><i class="far fa-file-pdf text-danger"></i></span>
+                            <span class="name font-weight-bold">Convert to PDF</span>
+                        </div>
+                    </a>
+                    <a href="#" class="option text-decoration-none col-sm-3">
+                        <div class="p-3 shadow-sm rounded mt-2">
+                            <span class="icon"><i class="far fa-file-word text-primary"></i></span>
+                            <span class="name font-weight-bold">Convert to Word</span>
+                        </div>
+                    </a>
+                    <a href="#" class="option text-decoration-none col-sm-3">
+                        <div class="p-3 shadow-sm rounded mt-2">
+                            <span class="icon"><i class="far fa-file-excel text-success"></i></span>
+                            <span class="name font-weight-bold">Convert to Excel</span>
+                        </div>
+                    </a>
+                    <a href="#" class="option text-decoration-none col-sm-3">
+                        <div class="p-3 shadow-sm rounded mt-2">
+                            <span class="icon"><i class="far fa-file-powerpoint" style="color: orange;"></i></span>
+                            <span class="name font-weight-bold">Convert to PPT</span>
+                        </div>
+                    </a>
+                    <a href="#" class="option text-decoration-none col-sm-3">
+                        <div class="p-3 shadow-sm rounded mt-2">
+                            <span class="icon"><i class="far fa-file-image text-info"></i></span>
+                            <span class="name font-weight-bold">Convert to Image</span>
+                        </div>
+                    </a>
+                    <a href="#" class="option text-decoration-none col-sm-3">
+                        <div class="p-3 shadow-sm rounded mt-2">
+                            <span class="icon"><i class="fas fa-lock text-muted"></i></span>
+                            <span class="name font-weight-bold">Encrypt file</span>
+                        </div>
+                    </a>
+                    <a href="#" class="option text-decoration-none col-sm-3">
+                        <div class="p-3 shadow-sm rounded mt-2">
+                            <span class="icon"><i class="fas fa-unlock-alt text-primary"></i></span>
+                            <span class="name font-weight-bold">Decrypt file</span>
+                        </div>
+                    </a>
+                    <a href="#" class="option text-decoration-none col-sm-3">
+                        <div class="p-3 shadow-sm rounded mt-2">
+                            <span class="icon"><i class="far fa-file-archive text-muted"></i></span>
+                            <span class="name font-weight-bold">Compress file</span>
+                        </div>
+                    </a>
+
+                </div>
+            </div>
+        </div>
+    </main>
     <footer th:replace="~{/fragment/app-fragment :: footer}"></footer>
-    <div th:replace="~{/fragment/app-fragment :: copyright}"></div>
 </body>
 </html>

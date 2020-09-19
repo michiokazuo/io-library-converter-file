@@ -21,6 +21,14 @@
                             <label for="email-forgot-password" class="col-form-label">Your email :</label>
                             <input type="email" class="form-control" id="email-forgot-password" placeholder="Enter email">
                         </div>
+                        <div class="form-group">
+                            <label for="password-forgot-password" class="col-form-label">New password :</label>
+                            <input type="password" class="form-control" id="password-forgot-password" placeholder="Enter new password">
+                        </div>
+                        <div class="form-group">
+                            <label for="password-confirm-forgot" class="col-form-label">Confirm password :</label>
+                            <input type="password" class="form-control" id="password-confirm-forgot" placeholder="Enter passowrd">
+                        </div>
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -59,10 +67,10 @@
                             <div class="col-md-6">
                                 <label>Avatar</label>
                                 <div class="custom-file">
-                                    <input type="file" class="custom-file-input" id="avatar" onchange="reloadImage()">
+                                    <input type="file" class="custom-file-input" id="avatar" onchange="reloadImage()" accept="image/*">
                                     <label for="avatar" class="custom-file-label">Select Avatar</label>
                                 </div>
-                                <img src="../static/file/user-avatar.png" id="avatar-photo" class="border rounded mt-3" alt="avatar" style="width: 200px;">
+                                <img th:src="@{media/avatar-user.png}" id="avatar-photo" class="border rounded mt-3" alt="avatar" style="width: 200px;">
                             </div>
                         </div>
                     </form>

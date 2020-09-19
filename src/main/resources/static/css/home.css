@@ -1,0 +1,14 @@
+a.option:hover div{
+    transition: 0.3s;
+    background-color: rgb(229, 235, 229);
+}
+a.option .icon{
+    font-size: 50px;
+}
+a.option .name{
+    color: black;
+    font-size: 30px;
+}
+.list-file .bar-title{
+    cursor: pointer;
+}
