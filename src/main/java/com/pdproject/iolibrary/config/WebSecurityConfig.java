@@ -37,10 +37,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().antMatchers("/", "/home", "/login", "/logout", "/403").permitAll();
 
         // chỉ cho phép người dùng đã đăng nhập với quền user hoặc admin truy cập
-        http.authorizeRequests().antMatchers("/user/**").access("hasAnyRole('ROLE_USER','ROLE_ADMIN')");
+        http.authorizeRequests().antMatchers("/user/**")
+                .access("hasAnyRole('ROLE_USER','ROLE_ADMIN')");
 
         // chỉ cho phép người dùng đã đăng nhập với admin truy cập chỉ cho
-        http.authorizeRequests().antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')");
+        http.authorizeRequests().antMatchers("/admin/**","/api/v1/private/**")
+                .access("hasRole('ROLE_ADMIN')");
 
         // khi người dùng login với vai trò X, nhưng truy cập vào trang yêu cầu vai trò Y
         // ngoại lệ AccessDeniedException sẽ ném ra
@@ -50,8 +52,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().and().formLogin()
                 .loginProcessingUrl("/security-login")
                 .loginPage("/login")
-                .defaultSuccessUrl("/user/user-info")
-                .failureUrl("/login?error=true")
+                .defaultSuccessUrl("/api/v1/public/user/login-success")
+                .failureUrl("/api/v1/public/user/login-fail")
                 .usernameParameter("username")
                 .passwordParameter("password")
                 .and().logout().logoutUrl("/logout").logoutSuccessUrl("/home");
