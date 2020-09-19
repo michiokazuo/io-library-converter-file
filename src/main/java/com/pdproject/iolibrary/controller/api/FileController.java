@@ -1,64 +1,62 @@
 package com.pdproject.iolibrary.controller.api;
 
+import com.pdproject.iolibrary.dto.FileDTO;
 import com.pdproject.iolibrary.model.FileIO;
-import com.pdproject.iolibrary.model.JsonResult;
-import com.pdproject.iolibrary.repository.FileIORepository;
+import com.pdproject.iolibrary.model.ResponseMessage;
 import com.pdproject.iolibrary.service.ConvertFileService;
+import com.pdproject.iolibrary.service.FileService;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.security.Principal;
+import java.text.SimpleDateFormat;
+import java.util.List;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping(path = "/api/v1/public/convert/*")
+@RequestMapping(path = "/api/v1/public/*")
 public class FileController {
 
-    @Autowired
-    private JsonResult jsonResult;
+    private final ResponseMessage message;
 
-    @Autowired
-    private ConvertFileService convertFileService;
+    private final ConvertFileService convertFileService;
 
-    @Autowired
-    private FileIORepository fileIORepository;
+    private final FileService fileService;
 
-    @PostMapping(value = {"to/{toFormat}/{password}", "to/{toFormat}"})
-    public JsonResult convertFile(@PathVariable(name = "toFormat") String toFormat,
-                                  @PathVariable(name = "password", required = false) String password,
-                                  @RequestParam(name = "file") MultipartFile file) {
-        JsonResult rs = null;
+    @PostMapping("/convert/to/{toFormat}")
+    public ResponseMessage convertFile(@PathVariable(name = "toFormat") String toFormat,
+                                       @RequestParam(name = "password", required = false) String password,
+                                       @RequestParam(name = "file") MultipartFile file) {
+        ResponseMessage rs = null;
 
         try {
-            FileIO fileIO = password == null
+            FileDTO fileDTO = password == null
                     ? convertFileService.convert(file, toFormat.toLowerCase()) : convertFileService.convert(file, toFormat.toLowerCase(), password);
 
-            String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-                    .path("/api/v1/convert/download/")
-                    .path(fileIO.getId() + "")
-                    .toUriString();
-            rs = jsonResult.jsonSuccess(fileDownloadUri);
+            rs = message.successResponse("success", fileDTO);
 
         } catch (Exception e) {
             e.printStackTrace();
-            rs = jsonResult.jsonFailure("Download Fail");
+            rs = message.failResponse("Download Fail");
         }
         return rs;
     }
 
-    @GetMapping("/download/{id}")
-    public ResponseEntity<Resource> downloadFileConvert(@PathVariable("id") int id) {
+    @GetMapping("/file-download/{file-name}/{id}")
+    public ResponseEntity<Resource> downloadFileConvert(@PathVariable("id") int id,
+                                                        @PathVariable("file-name") String name) {
         try {
-            FileIO fileIO = fileIORepository.findById(id).get();
+            FileIO fileIO = fileService.downFile(id);
 
             String fileName = fileIO.getFilename();
             byte[] bytesData = fileIO.getContent();
@@ -81,4 +79,131 @@ public class FileController {
         return ResponseEntity.noContent().build();
     }
 
+    @GetMapping("/find-all")
+    public ResponseMessage findAll(Principal principal) {
+        ResponseMessage rs = null;
+
+        try {
+            User user = (User) ((Authentication) principal).getPrincipal();
+
+            List<FileDTO> fileDTOList = fileService.findAll(user.getUsername());
+
+            rs = fileDTOList != null ? message.successResponse("success", fileDTOList) : message.successResponse("success", "No Data");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            rs = message.failResponse("Find All Error");
+        }
+
+        return rs;
+    }
+
+    @GetMapping("/find-by-id/{id}")
+    public ResponseMessage findById(@PathVariable("id") Integer id) {
+        ResponseMessage rs = null;
+
+        try {
+            FileDTO fileDTO = fileService.findById(id);
+
+            rs = fileDTO != null ? message.successResponse("success", fileDTO) : message.successResponse("success", "No Data");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            rs = message.failResponse("Find By Id Error");
+        }
+
+        return rs;
+    }
+
+    @GetMapping("/search/{file-name}/{start-date}/{end-date}")
+    public ResponseMessage search(Principal principal,
+                                  @PathVariable("file-name") String fileName,
+                                  @PathVariable("start-date") String startDate,
+                                  @PathVariable("end-date") String endDate) {
+        ResponseMessage rs = null;
+
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
+            User user = (User) ((Authentication) principal).getPrincipal();
+
+            List<FileDTO> fileDTOList = fileService.search(fileName, dateFormat.parse(startDate)
+                    , dateFormat.parse(endDate), user.getUsername());
+
+            rs = fileDTOList != null ? message.successResponse("success", fileDTOList) : message.successResponse("success", "No Data");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            rs = message.failResponse("Find By Id Error");
+        }
+
+        return rs;
+    }
+
+    @GetMapping("/sort-by/{field}/{isASC}")
+    public ResponseMessage sortBy(Principal principal,
+                                  @PathVariable(name = "field") String field,
+                                  @PathVariable(name = "isASC") String isASC) {
+        ResponseMessage rs = null;
+
+        try {
+            User user = (User) ((Authentication) principal).getPrincipal();
+
+            List<FileDTO> fileDTOList = null;
+
+            if (isASC.equals("true") || isASC.equals("false")) {
+                fileDTOList = fileService.sortBy(field, Boolean.parseBoolean(isASC), user.getUsername());
+            } else {
+                fileDTOList = fileService.findAll(user.getUsername());
+            }
+
+            rs = fileDTOList != null ? message.successResponse("success", fileDTOList) : message.successResponse("success", "No Data");
+        } catch (Exception e) {
+            e.printStackTrace();
+            rs = message.failResponse("Find By Id Error");
+        }
+
+        return rs;
+    }
+
+    @GetMapping("/print-file")
+    public ResponseMessage printFile() {
+        ResponseMessage rs = null;
+
+        try {
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            rs = message.failResponse("Find By Id Error");
+        }
+
+        return rs;
+    }
+
+    @DeleteMapping("/delete-file/{id}")
+    public ResponseMessage deleteFile() {
+        ResponseMessage rs = null;
+
+        try {
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            rs = message.failResponse("Find By Id Error");
+        }
+
+        return rs;
+    }
+
+    @GetMapping("/share-files")
+    public ResponseMessage shareFiles() {
+        ResponseMessage rs = null;
+
+        try {
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            rs = message.failResponse("Find By Id Error");
+        }
+
+        return rs;
+    }
 }

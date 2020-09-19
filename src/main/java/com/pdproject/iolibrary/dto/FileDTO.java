@@ -8,8 +8,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class FileDTO extends BaseDTO {
-
     private String fileName;
     private String urlDownload;
-
 }

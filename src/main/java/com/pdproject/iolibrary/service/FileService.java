@@ -1,51 +1,30 @@
 package com.pdproject.iolibrary.service;
 
+import com.pdproject.iolibrary.dto.FileDTO;
 import com.pdproject.iolibrary.model.FileIO;
 
-import java.io.File;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 
-public interface FileService<T> {
-    boolean downFiles(List<Integer> listId) throws SQLException;
+public interface FileService {
+    FileIO downFile(Integer id) throws SQLException;
 
     boolean shareFiles(List<Integer> listId) throws SQLException;
 
-    FileIO findFile(int id) throws SQLException;
+    FileDTO findById(Integer id) throws Exception;
 
-    List<FileIO> findAll(int id_user) throws SQLException;
+    List<FileDTO> findAll(String email) throws SQLException;
 
-    List<FileIO> search(String fileName, Date startDate, Date endDate) throws SQLException; // thinking...
+    List<FileDTO> search(String fileName, Date startDate, Date endDate, String email) throws SQLException; // thinking...
 
-    List<FileIO> sortBy(String field, boolean isASC) throws SQLException;
+    List<FileDTO> sortBy(String field, boolean isASC, String email) throws SQLException;
 
-    boolean saveFile(T t) throws SQLException;
+    boolean deleteFile(Integer id) throws SQLException;
 
-    boolean deleteFile(int id) throws SQLException;
+    boolean printFile(Integer id) throws SQLException;
 
-    // has account
+    boolean printFile(FileDTO t) throws SQLException;
 
-    T securityFile(int id) throws SQLException;
-
-    T openFile(int id) throws SQLException;
-
-    boolean printFile(int id) throws SQLException;
-
-    T compressFile(int id) throws SQLException;
-
-    T decompressFile(int id) throws SQLException;
-
-    // no account
-
-    T securityFile(T t) throws SQLException;
-
-    T openFile(T t) throws SQLException;
-
-    boolean printFile(T t) throws SQLException;
-
-    T compressFile(T t) throws SQLException;
-
-    T decompressFile(T t) throws SQLException;
-
+    byte[] getContentFile(Integer id) throws SQLException;
 }
