@@ -15,9 +15,9 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class UserConverter implements Converter<User, UserDTO> {
 
-    private ModelMapper modelMapper;
+    private final ModelMapper modelMapper;
 
-    private Converter<FileIO, FileDTO> converter;
+    private final Converter<FileIO, FileDTO> converter;
 
     @Override
     public UserDTO toDTO(User user) {

@@ -13,7 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @PasswordConfirm
-public class UserDTO extends BaseDTO{
+public class UserDTO extends BaseDTO {
     @NotNull
     @NotEmpty
     private String name;
