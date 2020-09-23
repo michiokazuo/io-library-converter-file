@@ -20,8 +20,12 @@ public class FileUtils {
     @Value("${file.upload-avatar}")
     private String pathSaveFile;
 
+    @Value("${path.avatar}")
+    private String pathFileGet;
+
     public void storeFile(MultipartFile file) throws IOException {
         this.fileName = file.getOriginalFilename();
+        this.pathFileGet += fileName;
         this.pathFile = pathSaveFile + "/" + fileName;
         this.typeFile = getTypeFile(fileName);
         this.size = file.getSize();
@@ -29,6 +33,7 @@ public class FileUtils {
         BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(fileSave));
         bos.write(file.getBytes());
         bos.close();
+        this.pathFile = pathFileGet + "/" + fileName;
     }
 
     private String getTypeFile(String fileName){

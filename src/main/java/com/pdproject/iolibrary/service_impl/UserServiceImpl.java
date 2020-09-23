@@ -7,6 +7,7 @@ import com.pdproject.iolibrary.repository.RoleRepository;
 import com.pdproject.iolibrary.repository.UserRepository;
 import com.pdproject.iolibrary.service.UserService;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -25,15 +26,20 @@ public class UserServiceImpl implements UserService {
 
     private final BCryptPasswordEncoder passwordEncoder;
 
+    @Value("${path.avatar-default}")
+    private String AVATAR_DEFAULT;
+
     @Override
     public UserDTO insert(UserDTO userDTO) throws Exception {
-        if (checkEmailExist(userDTO.getEmail())){
-            return null;
+        UserDTO dto = null;
+        if ((dto = findByEmail(userDTO.getEmail())) != null){
+            return dto;
         }
         User user = converter.toModel(userDTO);
         user.setEnabled(true);
         user.setRole(roleRepository.findById(1));
-        user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+        if (user.getAvatar() == null) user.setAvatar(AVATAR_DEFAULT);
+        if (userDTO.getPassword() != null) user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         return converter.toDTO(userRepository.save(user));
     }
 
@@ -61,6 +67,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserDTO updatePassword(String email, String password) throws Exception {
+        User user = userRepository.findByEmailAndEnabledIsTrue(email);
+        if (user != null){
+            user.setPassword(passwordEncoder.encode(password));
+        }
+        return user != null ? converter.toDTO(userRepository.save(user)) : null;
+    }
+
+    @Override
     public List<UserDTO> findAll() {
         return userRepository.findAllByEnabledIsTrue().stream()
                 .map(user -> {
@@ -74,18 +89,13 @@ public class UserServiceImpl implements UserService {
     }
 
     public UserDTO findByEmail(String email) throws Exception {
-        return converter.toDTO(userRepository.findByEmailAndEnabledIsTrue(email));
+        User user = userRepository.findByEmailAndEnabledIsTrue(email);
+        return user != null ? converter.toDTO(user) : null;
     }
 
     @Override
     public UserDTO findById(int id) throws Exception {
-        return converter.toDTO(userRepository.findByIdAndEnabledIsTrue(id));
-    }
-
-    private boolean checkEmailExist(String email){
-        User result = userRepository.findAllByEnabledIsTrue().stream()
-                .filter(user -> user.getEmail().equals(email))
-                .findFirst().orElse(null);
-        return result != null;
+        User user = userRepository.findByIdAndEnabledIsTrue(id);
+        return user != null ? converter.toDTO(user) : null;
     }
 }
