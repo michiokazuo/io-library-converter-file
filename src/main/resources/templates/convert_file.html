@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Home Page</title>
+    <link rel="stylesheet" th:href="@{/css/home.css}">
+    <link rel="stylesheet" th:href="@{/css/convert_file.css}">
+    <th:block th:replace="~{/fragment/app-fragment :: head-resource}"></th:block>
+</head>
+<body>
+<menu th:replace="~{/fragment/app-fragment :: menu}"></menu>
+<main class="mt-5 mb-5 pt-3 pb-3 rounded shadow">
+    <div class="modal fade" id="content-file" tabindex="-1" role="dialog" aria-labelledby="content-file"
+         aria-hidden="true">
+        <div class="modal-dialog modal-xl h-100" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="file-content">Nội dung File</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body form-custom">
+                    <div class="row h-100">
+                        <iframe
+                                src='https://view.officeapps.live.com/op/embed.aspx?src=https://v2.convertapi.com/d/01a2a96873dea8941c12c907447a5046/Example%20Paper.xlsx'
+                                width='100%' height='100%' frameborder='0'></iframe>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="share-file" tabindex="-1" role="dialog" aria-labelledby="share-file" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="file-share">Share File</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-12">
+                                <form action="" id="form-post" novalidate>
+                                    <div class="form-group">
+                                        <label for="email-to"><strong>Email </strong></label>
+                                        <input type="text" class="form-control" name="email-to" id="email-to"
+                                               placeholder="Nhập email ..."
+                                               required>
+                                        <div class="invalid-feedback">
+                                            Bạn chưa điền email.
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <b>Bạn có thể chia sẻ file bằng cách đưa cho họ link dưới đây: </b>
+                                        <a href="https://v2.convertapi.com/d/01a2a96873dea8941c12c907447a5046/Example%20Paper.xlsx">
+                                            https://v2.convertapi.com/d/01a2a96873dea8941c12c907447a5046/Example%20Paper.xlsx
+                                        </a>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-success" id="btn-share">Gửi</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="title-page mt-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <h1>Convert File</h1>
+                </div>
+                <div class="col-12">
+                    <hr>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="convert-format">
+        <div class="bg-dark nav-tabs-bottom container">
+            <div class="row no-gutters format-selection">
+                <div class="col-sm-6 text-right right">
+                    <label for="source-format-select">
+                        From
+                    </label>
+                    <select id="source-format-select" name="Sources">
+                        <option value="">- select -</option>
+                        <option value="pdf">PDF</option>
+                        <option value="png">Image</option>
+                        <option value="pptx">PowerPoint</option>
+                        <option value="xlsx">Excel</option>
+                        <option value="docs">Word</option>
+                    </select>
+                </div>
+                <div class="col-sm-6 text-left left">
+                    <label for="destination-format-select">
+                        To
+                    </label>
+                    <select id="destination-format-select">
+                        <option value="">- select -</option>
+                        <option value="compress">compress</option>
+                        <option value="decompress">decompress</option>
+                        <option value="decrypt">decrypt</option>
+                        <option value="encrypt">encrypt</option>
+                        <option value="pdf">PDF</option>
+                        <option value="png">Image</option>
+                        <option value="pptx">PowerPoint</option>
+                        <option value="xlsx">Excel</option>
+                        <option value="docs">Word</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="convert">
+        <div class="container">
+            <div class="row">
+                <form action="" class="w-100 bg-success">
+                    <label for="choose-file" class="w-100 text-center" readonly>
+                        <input type="file" id="choose-file" readonly>
+
+                        <div class="symbol text-light">
+                            <i class="far fa-file-alt display-3 font-weight-bolder"></i>
+                        </div>
+
+                        <div class="choose row justify-content-center align-items-center mt-2">
+                            <h3 class="content col-12 text-light"> Chọn tệp từ </h3>
+                            <button type="button" id="file-local"
+                                    class="btn bg-white row justify-content-center align-items-center m-1">
+                                <i class="fas fa-desktop"></i>
+                                <span class=""> Máy tính </span>
+                            </button>
+
+                            <button type="button" id="file-drive" class="btn bg-white d-flex align-items-center m-1">
+                                <div class="" style="width: 24px; height: 24px; line-height: 0px;">
+                                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path id="Path" d="M8.33331 3H15.6666L23 15H15.6666L8.33331 3Z"
+                                              fill="#FFC107"></path>
+                                        <path id="Path_2" d="M4.6012 21L8.30086 15H23L19.3333 21H4.6012Z"
+                                              fill="#1976D2"></path>
+                                        <path id="Path_3" d="M1 15.0625L4.60119 21L12 9L8.33333 3L1 15.0625Z"
+                                              fill="#4CAF50"></path>
+                                    </svg>
+                                </div>
+                                <span class=""> Google Drive </span>
+                            </button>
+                        </div>
+
+                        <div class="file-name w-100 d-flex justify-content-center align-items-center mt-2">
+                            <div class="input col-sm-3">
+                                <input class="form-control mb-1" type="text" placeholder="File name ..." id="file-name"
+                                       readonly>
+                                <input class="form-control d-none" type="text" placeholder="Password ..." id="password">
+                            </div>
+
+                            <div class="col-sm-2">
+                                <button type="button" class="btn btn-primary w-100" data-toggle="modal"
+                                        data-target="#modal-product" id="btn-convert">
+                                    <i class="fas fa-exchange-alt"></i>
+                                    Convert
+                                </button>
+                            </div>
+                        </div>
+                    </label>
+                </form>
+            </div>
+            <div class="loading d-none">
+                <div class="spinner-border text-danger font-weight-bold" role="status"
+                     style="height: 100px; width:100px;">
+                    <span class="sr-only">Loading...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="result">
+        <div class="container border d-none">
+            <div class="row p-4 text-center">
+                <h3 class="text-dark w-100">File của bạn đã được chuyển đổi thành công. Xin hãy tải file về.</h3>
+                <div class="file-convert w-100 row justify-content-between align-items-center">
+                    <div class="file-convert-name col-sm-6 font-weight-bold">
+                        <i class="far fa-file text-success" width="1em" height="1em"></i>
+                        <span id="file-convert-name" class>Bai_Tap_AI.xlsx</span>
+                    </div>
+                    <div class="download col-sm-6">
+                        <button type="button" class="btn btn-success m-1" data-toggle="modal" data-target="#content-file" id="btn-view"><i
+                                class="fas fa-eye"></i></i>
+                            Xem
+                        </button>
+                        <button type="button" class="btn btn-warning m-1 share-file" data-toggle="modal" data-target="#share-file"><i
+                                class="fas fa-share-alt"></i>
+                            Chia sẻ
+                        </button>
+                        <a href="#" class="text-decoration-none text-light btn btn-success m-1">
+                            <i class="fas fa-download"></i>
+                            <span class="text-light"> TẢI FILE XUỐNG </span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</main>
+<footer th:replace="~{/fragment/app-fragment :: footer}"></footer>
+<script th:src="@{/js/pages/ajax_page_convert_file.js}"></script>
+</body>
+</html>

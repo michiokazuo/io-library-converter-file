@@ -1,0 +1,70 @@
+.nav-tabs-bottom {
+    min-height: 6px;
+    font-size: 20px;
+    font-weight: 400;
+    color: #fff;
+    text-align: center;
+}
+
+.nav-tabs-bottom select {
+    width: 136px;
+    height: 42px;
+    border-radius: 24px;
+    font-weight: 700;
+    margin: 24px 15px;
+    outline: none;
+    border: 1px solid #e5e5e5;
+    background-color: #fff;
+    color: #000;
+    font-size: 16px;
+    padding: 8px 10px 10px 20px;
+}
+
+@media (max-width: 576px) {
+    .left, .right {
+        text-align: center!important;
+    }
+}
+
+input#choose-file{
+    height: 0;
+    width: 0;
+    overflow: hidden;
+}
+
+#file-name{
+    cursor: default;
+}
+
+.convert{
+    position: relative;
+}
+
+.convert container::after{
+    position: absolute;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    background-color: black;
+    opacity: 0.7;
+    display: none;
+}
+
+.loading{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content:center;
+    align-items:center;
+    z-index: 10;
+}
+
+.file-convert-name{
+    font-size: 20px;
+}
