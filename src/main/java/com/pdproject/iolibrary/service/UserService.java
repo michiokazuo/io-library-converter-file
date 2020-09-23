@@ -2,7 +2,6 @@ package com.pdproject.iolibrary.service;
 
 import com.pdproject.iolibrary.dto.UserDTO;
 
-import java.sql.SQLException;
 import java.util.List;
 
 public interface UserService {
@@ -12,6 +11,8 @@ public interface UserService {
     boolean delete(int id) throws Exception;
 
     UserDTO update(UserDTO userDTO) throws Exception;
+
+    UserDTO updatePassword(String email, String password) throws Exception;
 
     List<UserDTO> findAll() throws Exception;
 

@@ -2,7 +2,6 @@ package com.pdproject.iolibrary.controller.api;
 
 import com.pdproject.iolibrary.dto.FileDTO;
 import com.pdproject.iolibrary.model.FileIO;
-import com.pdproject.iolibrary.model.ResponseMessage;
 import com.pdproject.iolibrary.service.ConvertFileService;
 import com.pdproject.iolibrary.service.FileService;
 import lombok.AllArgsConstructor;
@@ -27,29 +26,22 @@ import java.util.List;
 @RequestMapping(path = "/api/v1/public/*")
 public class FileController {
 
-    private final ResponseMessage message;
-
     private final ConvertFileService convertFileService;
 
     private final FileService fileService;
 
     @PostMapping("/convert/to/{toFormat}")
-    public ResponseMessage convertFile(@PathVariable(name = "toFormat") String toFormat,
+    public ResponseEntity<FileDTO> convertFile(@PathVariable(name = "toFormat") String toFormat,
                                        @RequestParam(name = "password", required = false) String password,
                                        @RequestParam(name = "file") MultipartFile file) {
-        ResponseMessage rs = null;
-
         try {
             FileDTO fileDTO = password == null
                     ? convertFileService.convert(file, toFormat.toLowerCase()) : convertFileService.convert(file, toFormat.toLowerCase(), password);
-
-            rs = message.successResponse("success", fileDTO);
-
+            return ResponseEntity.ok(fileDTO);
         } catch (Exception e) {
             e.printStackTrace();
-            rs = message.failResponse("Download Fail");
         }
-        return rs;
+        return ResponseEntity.badRequest().build();
     }
 
     @GetMapping("/file-download/{file-name}/{id}")
@@ -80,48 +72,37 @@ public class FileController {
     }
 
     @GetMapping("/find-all")
-    public ResponseMessage findAll(Principal principal) {
-        ResponseMessage rs = null;
-
+    public ResponseEntity<List<FileDTO>> findAll(Principal principal) {
         try {
             User user = (User) ((Authentication) principal).getPrincipal();
 
             List<FileDTO> fileDTOList = fileService.findAll(user.getUsername());
 
-            rs = fileDTOList != null ? message.successResponse("success", fileDTOList) : message.successResponse("success", "No Data");
+           return  fileDTOList != null ? ResponseEntity.ok(fileDTOList) : ResponseEntity.noContent().build();
 
         } catch (Exception e) {
             e.printStackTrace();
-            rs = message.failResponse("Find All Error");
         }
 
-        return rs;
+        return ResponseEntity.badRequest().build();
     }
 
     @GetMapping("/find-by-id/{id}")
-    public ResponseMessage findById(@PathVariable("id") Integer id) {
-        ResponseMessage rs = null;
-
+    public ResponseEntity<FileDTO> findById(@PathVariable("id") Integer id) {
         try {
             FileDTO fileDTO = fileService.findById(id);
-
-            rs = fileDTO != null ? message.successResponse("success", fileDTO) : message.successResponse("success", "No Data");
-
+            return fileDTO != null ? ResponseEntity.ok(fileDTO) : ResponseEntity.noContent().build();
         } catch (Exception e) {
             e.printStackTrace();
-            rs = message.failResponse("Find By Id Error");
         }
-
-        return rs;
+        return ResponseEntity.badRequest().build();
     }
 
     @GetMapping("/search/{file-name}/{start-date}/{end-date}")
-    public ResponseMessage search(Principal principal,
+    public ResponseEntity<List<FileDTO>> search(Principal principal,
                                   @PathVariable("file-name") String fileName,
                                   @PathVariable("start-date") String startDate,
                                   @PathVariable("end-date") String endDate) {
-        ResponseMessage rs = null;
-
         try {
             SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
             User user = (User) ((Authentication) principal).getPrincipal();
@@ -129,22 +110,19 @@ public class FileController {
             List<FileDTO> fileDTOList = fileService.search(fileName, dateFormat.parse(startDate)
                     , dateFormat.parse(endDate), user.getUsername());
 
-            rs = fileDTOList != null ? message.successResponse("success", fileDTOList) : message.successResponse("success", "No Data");
+            return fileDTOList != null ? ResponseEntity.ok(fileDTOList) : ResponseEntity.noContent().build();
 
         } catch (Exception e) {
             e.printStackTrace();
-            rs = message.failResponse("Find By Id Error");
         }
 
-        return rs;
+        return ResponseEntity.badRequest().build();
     }
 
     @GetMapping("/sort-by/{field}/{isASC}")
-    public ResponseMessage sortBy(Principal principal,
+    public ResponseEntity<List<FileDTO>> sortBy(Principal principal,
                                   @PathVariable(name = "field") String field,
                                   @PathVariable(name = "isASC") String isASC) {
-        ResponseMessage rs = null;
-
         try {
             User user = (User) ((Authentication) principal).getPrincipal();
 
@@ -156,54 +134,46 @@ public class FileController {
                 fileDTOList = fileService.findAll(user.getUsername());
             }
 
-            rs = fileDTOList != null ? message.successResponse("success", fileDTOList) : message.successResponse("success", "No Data");
+            return fileDTOList != null ? ResponseEntity.ok(fileDTOList) : ResponseEntity.noContent().build();
         } catch (Exception e) {
             e.printStackTrace();
-            rs = message.failResponse("Find By Id Error");
         }
 
-        return rs;
+        return ResponseEntity.badRequest().build();
     }
 
     @GetMapping("/print-file")
-    public ResponseMessage printFile() {
-        ResponseMessage rs = null;
+    public ResponseEntity printFile() {
 
         try {
 
         } catch (Exception e) {
             e.printStackTrace();
-            rs = message.failResponse("Find By Id Error");
+
         }
 
-        return rs;
+        return null;
     }
 
     @DeleteMapping("/delete-file/{id}")
-    public ResponseMessage deleteFile() {
-        ResponseMessage rs = null;
-
+    public ResponseEntity deleteFile() {
         try {
 
         } catch (Exception e) {
             e.printStackTrace();
-            rs = message.failResponse("Find By Id Error");
         }
 
-        return rs;
+        return null;
     }
 
     @GetMapping("/share-files")
-    public ResponseMessage shareFiles() {
-        ResponseMessage rs = null;
-
+    public ResponseEntity shareFiles() {
         try {
 
         } catch (Exception e) {
             e.printStackTrace();
-            rs = message.failResponse("Find By Id Error");
         }
 
-        return rs;
+        return null;
     }
 }

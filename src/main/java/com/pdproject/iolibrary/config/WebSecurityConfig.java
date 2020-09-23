@@ -30,6 +30,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        // disable crsf
         http.csrf().disable();
 
         // cho phép tất cả các request truy cập
@@ -45,17 +46,25 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         // khi người dùng login với vai trò X, nhưng truy cập vào trang yêu cầu vai trò Y
         // ngoại lệ AccessDeniedException sẽ ném ra
-        http.authorizeRequests().and().exceptionHandling().accessDeniedPage("/403");
+        // đã được error controller bắt lỗi
+        // http.authorizeRequests().and().exceptionHandling().accessDeniedPage("/403");
 
-        // cấu hình cho form login
-        http.authorizeRequests().and().formLogin()
-                .loginProcessingUrl("/security-login")
+        // cấu hình cho login
+        http.authorizeRequests().and()
+                .logout().logoutUrl("/logout").clearAuthentication(true).deleteCookies().invalidateHttpSession(true).logoutSuccessUrl("/home")
+                .and()
+                .formLogin()
                 .loginPage("/login")
-                .defaultSuccessUrl("/api/v1/public/user/login-success")
-                .failureUrl("/api/v1/public/user/login-fail")
+                .loginProcessingUrl("/security-login")
+                .defaultSuccessUrl("/api/v1/public/login-process/success")
+                .failureUrl("/api/v1/public/login-process/fail")
                 .usernameParameter("username")
                 .passwordParameter("password")
-                .and().logout().logoutUrl("/logout").logoutSuccessUrl("/home");
+                .and()
+                .oauth2Login()
+                .loginPage("/login")
+                .defaultSuccessUrl("/api/v1/public/login-process/oauth-success")
+                .failureUrl("/api/v1/public/login-process/fail");
 
         // cấu hình remember me, thời gian 1296000 giây
         http.rememberMe().key("iolibrary").tokenValiditySeconds(1296000);
