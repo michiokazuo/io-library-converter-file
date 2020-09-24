@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,12 +26,17 @@ public class UserController {
 
     @GetMapping(value = "/get-my-info")
     public ResponseEntity<UserDTO> getUser(Authentication authentication){
-        User user = (User) authentication.getPrincipal();
         UserDTO userDTO = null;
         try {
+            User user = (User) authentication.getPrincipal();
             userDTO = userService.findByEmail(user.getUsername());
         } catch (Exception e) {
-            e.printStackTrace();
+            OAuth2AuthenticationToken token = (OAuth2AuthenticationToken) authentication;
+            try {
+                userDTO = userService.findByEmail(token.getPrincipal().getAttribute("email"));
+            } catch (Exception exception) {
+                System.out.println(exception.getMessage());
+            }
         }
         return userDTO != null ? ResponseEntity.ok(userDTO) : ResponseEntity.notFound().build();
     }
