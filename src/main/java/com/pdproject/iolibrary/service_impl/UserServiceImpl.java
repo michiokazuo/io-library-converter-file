@@ -6,6 +6,7 @@ import com.pdproject.iolibrary.model.User;
 import com.pdproject.iolibrary.repository.RoleRepository;
 import com.pdproject.iolibrary.repository.UserRepository;
 import com.pdproject.iolibrary.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -16,23 +17,20 @@ import java.util.stream.Collectors;
 @Service
 public class UserServiceImpl implements UserService {
 
-    private final UserRepository userRepository;
+    @Autowired
+    private UserRepository userRepository;
 
-    private final RoleRepository roleRepository;
+    @Autowired
+    private  RoleRepository roleRepository;
 
-    private final Converter<User, UserDTO> converter;
+    @Autowired
+    private Converter<User, UserDTO> converter;
 
-    private final BCryptPasswordEncoder passwordEncoder;
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
     @Value("${path.avatar-default}")
     private String AVATAR_DEFAULT;
-
-    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, Converter<User, UserDTO> converter, BCryptPasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
-        this.converter = converter;
-        this.passwordEncoder = passwordEncoder;
-    }
 
     @Override
     public UserDTO insert(UserDTO userDTO) throws Exception {

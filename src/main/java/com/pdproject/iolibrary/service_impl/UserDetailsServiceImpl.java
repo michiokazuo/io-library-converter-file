@@ -2,6 +2,7 @@ package com.pdproject.iolibrary.service_impl;
 
 import com.pdproject.iolibrary.model.User;
 import com.pdproject.iolibrary.repository.UserRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

@@ -13,12 +13,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.security.Principal;
+import java.sql.SQLException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
@@ -73,19 +76,20 @@ public class FileController {
     }
 
     @GetMapping("/find-all")
-    public ResponseEntity<List<FileDTO>> findAll(Principal principal) {
+    public ResponseEntity<List<FileDTO>> findAll(Authentication authentication) {
+        List<FileDTO> fileDTOList = null;
         try {
-            User user = (User) ((Authentication) principal).getPrincipal();
-
-            List<FileDTO> fileDTOList = fileService.findAll(user.getUsername());
-
-            return fileDTOList != null ? ResponseEntity.ok(fileDTOList) : ResponseEntity.noContent().build();
-
+            User user = (User) authentication.getPrincipal();
+            fileDTOList = fileService.findAll(user.getUsername());
         } catch (Exception e) {
-            e.printStackTrace();
+            OAuth2AuthenticationToken token = (OAuth2AuthenticationToken) authentication;
+            try {
+                fileDTOList = fileService.findAll(token.getPrincipal().getAttribute("email"));
+            } catch (SQLException throwables) {
+                return ResponseEntity.badRequest().build();
+            }
         }
-
-        return ResponseEntity.badRequest().build();
+        return  fileDTOList != null ? ResponseEntity.ok(fileDTOList) : ResponseEntity.noContent().build();
     }
 
     @GetMapping("/find-by-id/{id}")
@@ -100,47 +104,59 @@ public class FileController {
     }
 
     @GetMapping("/search/{file-name}/{start-date}/{end-date}")
-    public ResponseEntity<List<FileDTO>> search(Principal principal,
-                                                @PathVariable("file-name") String fileName,
-                                                @PathVariable("start-date") String startDate,
-                                                @PathVariable("end-date") String endDate) {
+    public ResponseEntity<List<FileDTO>> search(Authentication authentication,
+                                  @PathVariable("file-name") String fileName,
+                                  @PathVariable("start-date") String startDate,
+                                  @PathVariable("end-date") String endDate) {
+        List<FileDTO> fileDTOList = null;
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
+        String email = null;
         try {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
-            User user = (User) ((Authentication) principal).getPrincipal();
-
-            List<FileDTO> fileDTOList = fileService.search(fileName, dateFormat.parse(startDate)
-                    , dateFormat.parse(endDate), user.getUsername());
-
-            return fileDTOList != null ? ResponseEntity.ok(fileDTOList) : ResponseEntity.noContent().build();
-
+            User user = (User) authentication.getPrincipal();
+            email = user.getUsername();
         } catch (Exception e) {
-            e.printStackTrace();
+            OAuth2AuthenticationToken token = (OAuth2AuthenticationToken) authentication;
+            email = token.getPrincipal().getAttribute("email");
         }
-
-        return ResponseEntity.badRequest().build();
+        if (email != null){
+            try {
+                fileDTOList = fileService.search(fileName, dateFormat.parse(startDate), dateFormat.parse(endDate), email);
+            } catch (Exception throwables) {
+                return ResponseEntity.badRequest().build();
+            }
+        }else {
+            return ResponseEntity.badRequest().build();
+        }
+        return fileDTOList != null ? ResponseEntity.ok(fileDTOList) : ResponseEntity.noContent().build();
     }
 
     @GetMapping("/sort-by/{field}/{isASC}")
-    public ResponseEntity<List<FileDTO>> sortBy(Principal principal,
-                                                @PathVariable(name = "field") String field,
-                                                @PathVariable(name = "isASC") String isASC) {
+    public ResponseEntity<List<FileDTO>> sortBy(Authentication authentication,
+                                  @PathVariable(name = "field") String field,
+                                  @PathVariable(name = "isASC") String isASC) {
+        List<FileDTO> fileDTOList = null;
+        String email = null;
         try {
-            User user = (User) ((Authentication) principal).getPrincipal();
-
-            List<FileDTO> fileDTOList = null;
-
-            if (isASC.equals("true") || isASC.equals("false")) {
-                fileDTOList = fileService.sortBy(field, Boolean.parseBoolean(isASC), user.getUsername());
-            } else {
-                fileDTOList = fileService.findAll(user.getUsername());
-            }
-
-            return fileDTOList != null ? ResponseEntity.ok(fileDTOList) : ResponseEntity.noContent().build();
+            User user = (User) authentication.getPrincipal();
+            email = user.getUsername();
         } catch (Exception e) {
-            e.printStackTrace();
+            OAuth2AuthenticationToken token = (OAuth2AuthenticationToken) authentication;
+            email = token.getPrincipal().getAttribute("email");
         }
-
-        return ResponseEntity.badRequest().build();
+        if (email != null){
+            try {
+                if (isASC.equals("true") || isASC.equals("false")) {
+                    fileDTOList = fileService.sortBy(field, Boolean.parseBoolean(isASC), email);
+                } else {
+                    fileDTOList = fileService.findAll(email);
+                }
+            } catch (Exception throwables) {
+                return ResponseEntity.badRequest().build();
+            }
+        }else {
+            return ResponseEntity.badRequest().build();
+        }
+        return fileDTOList != null ? ResponseEntity.ok(fileDTOList) : ResponseEntity.noContent().build();
     }
 
     @GetMapping("/print-file")
