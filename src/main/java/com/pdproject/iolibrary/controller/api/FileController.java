@@ -10,6 +10,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
@@ -35,8 +36,8 @@ public class FileController {
 
     @PostMapping("/convert/to/{toFormat}")
     public ResponseEntity<FileDTO> convertFile(@PathVariable(name = "toFormat") String toFormat,
-                                       @RequestParam(name = "password", required = false) String password,
-                                       @RequestParam(name = "file") MultipartFile file) {
+                                               @RequestParam(name = "password", required = false) String password,
+                                               @RequestParam(name = "file") MultipartFile file) {
         try {
             FileDTO fileDTO = password == null
                     ? convertFileService.convert(file, toFormat.toLowerCase()) : convertFileService.convert(file, toFormat.toLowerCase(), password);
@@ -172,24 +173,18 @@ public class FileController {
     }
 
     @DeleteMapping("/delete-file/{id}")
-    public ResponseEntity deleteFile() {
+    public ResponseEntity<String> deleteFile(Principal principal,
+                                     @PathVariable("id") Integer id) {
         try {
+            User user = (User) ((Authentication) principal).getPrincipal();
+
+            return fileService.deleteFile(user.getUsername(), id) ? ResponseEntity.ok("Delete Complete") : ResponseEntity.noContent().build();
 
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return null;
+        return ResponseEntity.badRequest().build();
     }
 
-    @GetMapping("/share-files")
-    public ResponseEntity shareFiles() {
-        try {
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return null;
-    }
 }

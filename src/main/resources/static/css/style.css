@@ -16,3 +16,8 @@ footer{
 main form{
     font-family: var(--font-main);
 }
+
+th, td{
+    vertical-align: center!important;
+    text-align: center!important;
+}

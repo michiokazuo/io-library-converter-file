@@ -10,6 +10,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -27,22 +29,22 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public FileIO downFile(Integer id) {
-        return fileIORepository.findById(id).orElse(null);
+        return (id == null || id < 0) ? null : fileIORepository.findByIdAndEnabledIsTrue(id);
     }
 
     @Override
-    public boolean shareFiles(List<Integer> listId) {
+    public boolean shareFiles(String email, Integer id) {
         return false;
     }
 
     @Override
     public FileDTO findById(Integer id) throws Exception {
-        return converter.toDTO(fileIORepository.findById(id).orElse(null));
+        return (id == null || id < 0) ? null : converter.toDTO(fileIORepository.findByIdAndEnabledIsTrue(id));
     }
 
     @Override
     public List<FileDTO> findAll(String email) {
-        return userRepository.findByEmailAndEnabledIsTrue(email).getFileIOList()
+        return email == null ? null : userRepository.findByEmailAndEnabledIsTrue(email).getFileIOList()
                 .stream().map(file -> {
                     try {
                         return converter.toDTO(file);
@@ -55,22 +57,31 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public List<FileDTO> search(String fileName, Date startDate, Date endDate, String email) {
-        return userRepository.findByEmailAndEnabledIsTrue(email).getFileIOList()
-                .stream().filter(f -> (f.getFilename().toUpperCase().contains(fileName.toUpperCase())) && f.getCreateDate().compareTo(startDate) >= 0 && f.getCreateDate().compareTo(endDate) <= 0).collect(Collectors.toList())
-                .stream().map(file -> {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        List<FileDTO> fileDTOList = findAll(email);
+
+        return fileDTOList == null ? null : fileDTOList
+                .stream().filter(f -> {
                     try {
-                        return converter.toDTO(file);
-                    } catch (Exception e) {
+                        return (f.getFileName().toUpperCase().contains(fileName == null ? "" : fileName.toUpperCase()))
+                                && f.getCreateDate().compareTo(startDate == null ? dateFormat.parse("01-01-0000") : startDate) >= 0
+                                && f.getCreateDate().compareTo(endDate == null ? dateFormat.parse("31-12-9999") : endDate) <= 0;
+                    } catch (ParseException e) {
                         e.printStackTrace();
-                        return null;
+                        return true;
                     }
-                }).collect(Collectors.toList());
+                })
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<FileDTO> sortBy(String field, boolean isASC, String email) {
+        Integer userId = userRepository.findByEmailAndEnabledIsTrue(email).getId();
+
+        if (userId == null) return null;
+
         return fileIORepository.findAll(Sort.by(isASC ? Sort.Direction.ASC : Sort.Direction.DESC, field))
-                .stream().filter(f -> (f.getCreateBy() != null && f.getCreateBy().getId().equals(userRepository.findByEmailAndEnabledIsTrue(email).getId()))).collect(Collectors.toList())
+                .stream().filter(f -> (f.getCreateBy() != null && f.getCreateBy().getId().equals(userId))).collect(Collectors.toList())
                 .stream().map(file -> {
                     try {
                         return converter.toDTO(file);
@@ -82,8 +93,21 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public boolean deleteFile(Integer id) {
-        return false;
+    public boolean deleteFile(String email, Integer id) {
+        Integer userId = userRepository.findByEmailAndEnabledIsTrue(email).getId();
+        boolean rs = false;
+
+        if (id != null) {
+            FileIO fileIO = fileIORepository.findByIdAndEnabledIsTrue(id);
+            if (fileIO.getCreateBy().getId().equals(userId)) {
+                fileIO.setEnabled(false);
+
+                rs = true;
+            }
+
+        }
+
+        return rs;
     }
 
     @Override
@@ -98,7 +122,7 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public byte[] getContentFile(Integer id) {
-        return Objects.requireNonNull(fileIORepository.findById(id).orElse(null)).getContent();
+        return Objects.requireNonNull(fileIORepository.findByIdAndEnabledIsTrue(id)).getContent();
     }
     // convert pdf to
     // doc, docx, ppt, pptx, xls, xlsx, encrypt, decrypt, compress

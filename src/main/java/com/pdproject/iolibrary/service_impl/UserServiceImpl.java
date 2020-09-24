@@ -32,9 +32,6 @@ public class UserServiceImpl implements UserService {
     @Value("${path.avatar-default}")
     private String AVATAR_DEFAULT;
 
-    public UserServiceImpl() {
-    }
-
     @Override
     public UserDTO insert(UserDTO userDTO) throws Exception {
         UserDTO dto = null;

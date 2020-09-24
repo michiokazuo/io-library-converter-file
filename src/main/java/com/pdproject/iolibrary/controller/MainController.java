@@ -27,4 +27,14 @@ public class MainController {
     public String adminPage() {
         return "admin_page";
     }
+
+    @GetMapping(value = "/convert-file")
+    public String convertFile(){
+        return "convert_file";
+    }
+
+    @GetMapping("/api/v1/public/my-file")
+    public String myFile() {
+        return "my_file";
+    }
 }
