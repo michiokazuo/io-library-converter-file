@@ -30,21 +30,21 @@ public class LoginController {
         return result != null ? ResponseEntity.ok(result) : ResponseEntity.badRequest().build();
     }
 
-    @GetMapping("/oauth-success")
-    public ResponseEntity<UserDTO> loginOAuthSuccess(OAuth2AuthenticationToken token){
-        UserDTO result = null;
-        try {
-            OAuth2User oAuth2User = token.getPrincipal();
-            UserDTO dto = new UserDTO();
-            dto.setName(oAuth2User.getAttribute("name"));
-            dto.setEmail(oAuth2User.getAttribute("email"));
-            dto.setAvatar(oAuth2User.getAttribute("picture"));
-            result = userService.insert(dto);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        return result != null ? ResponseEntity.ok(result) : ResponseEntity.badRequest().build();
-    }
+//    @GetMapping("/oauth-success")
+//    public ResponseEntity<UserDTO> loginOAuthSuccess(OAuth2AuthenticationToken token){
+//        UserDTO result = null;
+//        try {
+//            OAuth2User oAuth2User = token.getPrincipal();
+//            UserDTO dto = new UserDTO();
+//            dto.setName(oAuth2User.getAttribute("name"));
+//            dto.setEmail(oAuth2User.getAttribute("email"));
+//            dto.setAvatar(oAuth2User.getAttribute("picture"));
+//            result = userService.insert(dto);
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//        return result != null ? ResponseEntity.ok(result) : ResponseEntity.badRequest().build();
+//    }
 
     @GetMapping("/fail")
     public ResponseEntity loginFail(){

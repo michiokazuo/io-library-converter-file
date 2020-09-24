@@ -5,14 +5,20 @@
 :root{
     --font-main : Verdana, Geneva, Tahoma, sans-serif;
 }
+
+body{
+    background-color: #f2f2f2;
+}
+
 menu{
-    background-color: black;
+    background-color: white;
     font-size: large;
     font-family: var(--font-main);
 }
 footer{
-    background-color: black;
+    background-color: white;
 }
+
 main form{
     font-family: var(--font-main);
 }

@@ -63,8 +63,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .oauth2Login()
                 .loginPage("/login")
-                .defaultSuccessUrl("/api/v1/public/login-process/oauth-success")
-                .failureUrl("/api/v1/public/login-process/fail");
+                .defaultSuccessUrl("/home")
+                .failureUrl("/login?fail");
 
         // cấu hình remember me, thời gian 1296000 giây
         http.rememberMe().key("iolibrary").tokenValiditySeconds(1296000);

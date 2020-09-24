@@ -3,6 +3,7 @@
 <head>
     <title>Title</title>
     <th:block th:fragment="head-resource">
+        <link rel="icon" th:href="@{/media/convert.png}" type="image/x-icon" />
         <!-- Required meta tags -->
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -21,9 +22,9 @@
     </th:block>
 </head>
 <body>
-    <menu th:fragment="menu">
-        <nav class="navbar navbar-expand-lg navbar-dark">
-            <a class="navbar-brand" href="#">
+    <menu class="shadow-sm" th:fragment="menu">
+        <nav class="navbar navbar-expand-lg navbar-light">
+            <a class="navbar-brand" th:href="@{/home}">
                 <img th:src="@{media/converter.png}" alt="" style="width: 70px;">
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
@@ -32,16 +33,16 @@
             <div class="collapse navbar-collapse" id="navbarNavDropdown">
                 <ul class="navbar-nav">
                     <li class="nav-item active">
-                        <a class="nav-link" href="#">Home</a>
+                        <a class="nav-link" th:href="@{/home}">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Converter</a>
+                        <a class="nav-link" th:href="@{/convert-file}">Converter</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Login</a>
+                        <a class="nav-link" th:href="@{/login}">Login</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-danger" href="#">Logout</a>
+                        <a class="nav-link text-danger" th:href="@{/logout}">Logout</a>
                     </li>
                 </ul>
             </div>
@@ -50,8 +51,8 @@
     <main th:fragment="main">
         <h1>Main</h1>
     </main>
-    <footer class="p-2 text-center text-danger" th:fragment="footer">
-        <span>@minhvu.darklyn</span>
+    <footer class="p-2 text-center text-danger shadow" th:fragment="footer">
+        <span>@minhvu.@phongcosy</span>
     </footer>
 </body>
 </html>

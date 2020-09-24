@@ -38,14 +38,18 @@ $(function () {
     btnFileGoogleDrive.click(function () {
         // The Browser API key obtained from the Google API Console.
         // Replace with your own Browser API key, or your own key.
-        var developerKey = 'AIzaSyDtAzWsaO1-phtipZkgakFuVexsM6V4qU0';
+        // var developerKey = 'AIzaSyDtAzWsaO1-phtipZkgakFuVexsM6V4qU0';
 
         // The Client ID obtained from the Google API Console. Replace with your own Client ID.
-        var clientId = "637109986363-j4jh5r54q7gdqda01pbt10lfndphki57.apps.googleusercontent.com"
+        // var clientId = "637109986363-j4jh5r54q7gdqda01pbt10lfndphki57.apps.googleusercontent.com"
 
         // Replace with your own project number from console.developers.google.com.
         // See "Project number" under "IAM & Admin" > "Settings"
-        var appId = "637109986363";
+        // var appId = "637109986363";
+
+        var developerKey = 'AIzaSyCSLBQVWyGIqIzieQDqvN6RtFRgOz57-mA';
+        var clientId = "1060024421170-l6t9ngeqnaohi0c3ijbkcqcjrtq312ns.apps.googleusercontent.com"
+        var appId = "1060024421170";
 
         // Scope to use to access user's Drive items.
         var scope = ['https://www.googleapis.com/auth/drive.file'];
