@@ -1,10 +1,19 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Error</title>
+    <th:block th:replace="~{/fragment/app-fragment :: head-resource}"></th:block>
 </head>
 <body>
-    <h1><strong style="color: red" th:text="${status}"></strong> <span th:text="${status == 404 ? 'Page not found' : 'Some thing went wrong'}"></span></h1>
+    <menu th:replace="~{/fragment/app-fragment :: menu}"></menu>
+    <main class="container mt-5 mb-5 pt-5 pb-5 rounded shadow text-center bg-white">
+        <i class="far fa-frown text-danger" style="font-size: 100px;"></i>
+        <h2 class="text-danger mt-4" th:if="${status == 500}">Opp Something Wrong !</h2>
+        <p class="text-muted" th:if="${status == 500}">Sorry ! Our engineers are repairing</p>
+        <h2 class="text-danger mt-4" th:if="${status == 404}">Page not found !</h2>
+        <p class="text-muted" th:if="${status == 404}">Sorry ! This page is not supported</p>
+        <h2 class="text-danger mt-4" th:if="${status == 403}">Exit on this page !</h2>
+        <p class="text-muted" th:if="${status == 403}">Sorry ! You are not allowed to access this site</p>
+    </main>
 </body>
 </html>

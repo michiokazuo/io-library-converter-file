@@ -21,24 +21,16 @@
                             <label for="email-forgot-password" class="col-form-label">Your email :</label>
                             <input type="email" class="form-control" id="email-forgot-password" placeholder="Enter email">
                         </div>
-                        <div class="form-group">
-                            <label for="password-forgot-password" class="col-form-label">New password :</label>
-                            <input type="password" class="form-control" id="password-forgot-password" placeholder="Enter new password">
-                        </div>
-                        <div class="form-group">
-                            <label for="password-confirm-forgot" class="col-form-label">Confirm password :</label>
-                            <input type="password" class="form-control" id="password-confirm-forgot" placeholder="Enter passowrd">
-                        </div>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary">Submit</button>
+                    <button type="button" class="btn btn-primary" id="btn-submit-forgot-password">Submit</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="modal fade" id="modal-register" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="modal-sign-up" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -60,9 +52,10 @@
                                     <input type="password" class="form-control" id="password-sign-up" placeholder="Enter password">
                                 </div>
                                 <div class="form-group">
-                                    <label for="password-confirm" class="col-form-label">Confirm password :</label>
-                                    <input type="password" class="form-control" id="password-confirm" placeholder="Enter password again">
+                                    <label for="password-confirm-sign-up" class="col-form-label">Confirm password :</label>
+                                    <input type="password" class="form-control" id="password-confirm-sign-up" placeholder="Enter password again">
                                 </div>
+                            </div>
                             </div>
                             <div class="col-md-6">
                                 <label>Avatar</label>
@@ -76,31 +69,39 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary">Sign up</button>
+                    <button type="button" class="btn btn-primary" id="btn-submit-sign-up">Sign up</button>
                 </div>
             </div>
         </div>
     </div>
 
     <main class="container p-5">
-        <form class="col-md-8 m-auto shadow pb-4 rounded">
+        <form class="col-md-8 m-auto shadow pb-4 rounded bg-white">
             <h2 class="text-center p-3">Login</h2>
+            <hr>
+            <div class="container">
+                <div class="row d-flex justify-content-around">
+                    <a href="/oauth2/authorization/facebook" class="col-sm-4 btn btn-outline-primary shadow-sm d-flex justify-content-left mt-1 mb-1"><i class="fab fa-facebook-f" style="align-self: center;"></i><span class="ml-3 font-weight-bold">Facebook</span></a>
+                    <a href="/oauth2/authorization/google" class="col-sm-4 btn btn-outline-danger shadow-sm d-flex justify-content-left mt-1 mb-1"><i class="fab fa-google" style="align-self: center;"></i><span class="ml-3 font-weight-bold">Google</span></a>
+                </div>
+            </div>
+            <hr>
             <div class="form-group">
-                <label for="email">Email address</label>
-                <input type="email" class="form-control" id="email" placeholder="Enter email">
+                <label for="email-sign-in">Email address</label>
+                <input type="email" class="form-control" id="email-sign-in" placeholder="Enter email">
             </div>
             <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" class="form-control" id="password" placeholder="Enter password">
+                <label for="password-sign-in">Password</label>
+                <input type="password" class="form-control" id="password-sign-in" placeholder="Enter password">
             </div>
             <div class="custom-control custom-checkbox">
                 <input type="checkbox" class="custom-control-input" id="remember-me">
                 <label class="custom-control-label" for="remember-me">Remember me</label>
             </div>
-            <button type="submit" class="btn btn-primary mt-3 mb-3">Login</button>
+            <button type="submit" class="btn btn-primary mt-3 mb-3" id="btn-submit-login">Login</button>
             <div>
-                <a href="#" data-toggle="modal" data-target="#modal-forgot-password">Forgot password?</a>
-                <a href="#" data-toggle="modal" data-target="#modal-register">Don't have account?</a>
+                <a href="#" id="link-forgot-password">Forgot password?</a>
+                <a href="#" id="link-sign-up">Don't have account?</a>
             </div>
         </form>
     </main>

@@ -22,9 +22,7 @@ public class UserController {
 
     private final UserService userService;
 
-    private final FileUtils fileUtils;
-
-    @GetMapping(value = "/get-my-info")
+    @GetMapping(value = "/my-info")
     public ResponseEntity<UserDTO> getUser(Authentication authentication){
         UserDTO userDTO = null;
         try {
@@ -41,8 +39,8 @@ public class UserController {
         return userDTO != null ? ResponseEntity.ok(userDTO) : ResponseEntity.notFound().build();
     }
 
-    @PostMapping(value = "/register")
-    public ResponseEntity<UserDTO> registerUser(@RequestBody @Valid UserDTO userDTO, BindingResult result) {
+    @PostMapping(value = "/insert")
+    public ResponseEntity<UserDTO> insertUser(@RequestBody @Valid UserDTO userDTO, BindingResult result) {
         UserDTO userResult = null;
         if (result.hasErrors()) {
             return ResponseEntity.badRequest().build();
@@ -82,17 +80,6 @@ public class UserController {
             e.printStackTrace();
         }
         return userDTO != null ? ResponseEntity.ok(userDTO) : ResponseEntity.badRequest().build();
-    }
-
-    @PostMapping(value = "/upload-avatar")
-    public ResponseEntity<FileUtils> uploadAvatar(@RequestParam("avatar") MultipartFile avatar) {
-        try {
-            fileUtils.storeFile(avatar);
-            return ResponseEntity.ok(fileUtils);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return ResponseEntity.badRequest().build();
     }
 
 }

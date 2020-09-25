@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/mail")
+@RequestMapping("/api/v1/public/mail/*")
 @AllArgsConstructor
 public class MailController {
 
@@ -39,14 +39,11 @@ public class MailController {
     public ResponseEntity<String> shareFiles(@RequestParam("email") String email,
                                              @RequestParam("link_share") String linkShare) {
         try {
-
             sendEmail(email, "LINK_SHARE_FILE", linkShare);
-
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().build();
         }
-
         return ResponseEntity.ok("Share Complete");
     }
 

@@ -7,14 +7,18 @@
 </head>
 <body>
     <menu th:replace="~{/fragment/app-fragment :: menu}"></menu>
-    <main class="container mt-5 mb-5 pt-3 pb-3 rounded shadow">
+    <main class="container mt-5 mb-5 pt-3 pb-3 rounded shadow bg-white">
         <div class="row">
             <div class="col-md-4 border border-left-0 border-top-0 border-bottom-0">
-                <div class="user-info p-2 rounded shadow">
+                <div class="p-2 rounded shadow-sm mb-2">
+                    <span class="badge badge-warning mr-3">Your are not login !!</span>
+                    <a href="/login" class="badge badge-success">sign in</a>
+                </div>
+                <div class="user-info p-2 rounded shadow-sm">
                     <img src="logo.jpg" class="rounded-circle" alt="" width="50px">
                     <span class="ml-2 text-success">Minh Vu</span>
                 </div>
-                <div class="list-file mt-3 p-2 rounded shadow">
+                <div class="list-file mt-3 p-2 rounded shadow-sm">
                     <div class="bar-title d-flex justify-content-between" data-toggle="collapse" data-target="#collapseFiles" aria-expanded="false" aria-controls="collapseExample">
                         <span><i class="fas fa-list-ul"></i><span class="ml-2">Your Files</span></span>
                         <span><i class="fas fa-sort"></i></span>
