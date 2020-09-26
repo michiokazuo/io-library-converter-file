@@ -89,7 +89,7 @@ public class FileController {
                 return ResponseEntity.badRequest().build();
             }
         }
-        return  fileDTOList != null ? ResponseEntity.ok(fileDTOList) : ResponseEntity.noContent().build();
+        return fileDTOList != null ? ResponseEntity.ok(fileDTOList) : ResponseEntity.noContent().build();
     }
 
     @GetMapping("/find-by-id/{id}")
@@ -105,9 +105,9 @@ public class FileController {
 
     @GetMapping("/search/{file-name}/{start-date}/{end-date}")
     public ResponseEntity<List<FileDTO>> search(Authentication authentication,
-                                  @PathVariable("file-name") String fileName,
-                                  @PathVariable("start-date") String startDate,
-                                  @PathVariable("end-date") String endDate) {
+                                                @PathVariable("file-name") String fileName,
+                                                @PathVariable("start-date") String startDate,
+                                                @PathVariable("end-date") String endDate) {
         List<FileDTO> fileDTOList = null;
         SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
         String email = null;
@@ -118,13 +118,13 @@ public class FileController {
             OAuth2AuthenticationToken token = (OAuth2AuthenticationToken) authentication;
             email = token.getPrincipal().getAttribute("email");
         }
-        if (email != null){
+        if (email != null) {
             try {
                 fileDTOList = fileService.search(fileName, dateFormat.parse(startDate), dateFormat.parse(endDate), email);
             } catch (Exception throwables) {
                 return ResponseEntity.badRequest().build();
             }
-        }else {
+        } else {
             return ResponseEntity.badRequest().build();
         }
         return fileDTOList != null ? ResponseEntity.ok(fileDTOList) : ResponseEntity.noContent().build();
@@ -132,8 +132,8 @@ public class FileController {
 
     @GetMapping("/sort-by/{field}/{isASC}")
     public ResponseEntity<List<FileDTO>> sortBy(Authentication authentication,
-                                  @PathVariable(name = "field") String field,
-                                  @PathVariable(name = "isASC") String isASC) {
+                                                @PathVariable(name = "field") String field,
+                                                @PathVariable(name = "isASC") String isASC) {
         List<FileDTO> fileDTOList = null;
         String email = null;
         try {
@@ -143,7 +143,7 @@ public class FileController {
             OAuth2AuthenticationToken token = (OAuth2AuthenticationToken) authentication;
             email = token.getPrincipal().getAttribute("email");
         }
-        if (email != null){
+        if (email != null) {
             try {
                 if (isASC.equals("true") || isASC.equals("false")) {
                     fileDTOList = fileService.sortBy(field, Boolean.parseBoolean(isASC), email);
@@ -153,7 +153,7 @@ public class FileController {
             } catch (Exception throwables) {
                 return ResponseEntity.badRequest().build();
             }
-        }else {
+        } else {
             return ResponseEntity.badRequest().build();
         }
         return fileDTOList != null ? ResponseEntity.ok(fileDTOList) : ResponseEntity.noContent().build();
@@ -174,11 +174,23 @@ public class FileController {
 
     @DeleteMapping("/delete-file/{id}")
     public ResponseEntity<String> deleteFile(Principal principal,
-                                     @PathVariable("id") Integer id) {
+                                             @PathVariable("id") Integer id) {
         try {
             User user = (User) ((Authentication) principal).getPrincipal();
 
             return fileService.deleteFile(user.getUsername(), id) ? ResponseEntity.ok("Delete Complete") : ResponseEntity.noContent().build();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ResponseEntity.badRequest().build();
+    }
+
+    @PutMapping("/update-view-file/{id}")
+    public ResponseEntity<String> updateViewFile(@PathVariable("id") Integer id) {
+        try {
+
+            return fileService.updateFile(id) ? ResponseEntity.ok("Delete Complete") : ResponseEntity.noContent().build();
 
         } catch (Exception e) {
             e.printStackTrace();
