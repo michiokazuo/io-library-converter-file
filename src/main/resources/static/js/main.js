@@ -84,3 +84,57 @@ async function ajaxUploadFile(url, file) {
     });
     return rs;
 }
+
+async function ajaxUploadFormData(url, formData) {
+    let rs = null;
+    let status = null;
+    await $.ajax({
+        type: "POST",
+        url: url,
+        data: formData,
+        cache: false,
+        contentType: false,
+        enctype: "multipart/form-data",
+        processData: false,
+        success: function (result, textStatus, xhr) {
+            rs = result;
+            status = xhr.status;
+        }
+    });
+    return {result : rs, status : status};
+}
+
+function viewError(selector, text) {
+    $(selector).addClass("is-invalid");
+    $(selector).siblings(".invalid-feedback").html(text+". Mời nhập lại!");
+}
+
+function hiddenError(selector) {
+    $(selector).removeClass("is-invalid");
+}
+
+function checkData(selector, textError){
+    let val = $(selector).val();
+    let check = false;
+    if (val.length > 0){
+        check = true;
+        hiddenError(selector);
+    }else {
+        viewError(selector, textError);
+    }
+    // trả về một đối tượng có 2 thuộc tính val và check
+    // val sẽ mang giá trị của biến val
+    // check sẽ mang giá trị của biến check
+    return {val, check};
+}
+
+function alertReport(isSuccess,text){
+    let result = `<div class="alert alert-${isSuccess ? "success" : "danger"} animate-report">
+                    <strong>!</strong> ${text}
+                  </div>`;
+    $("#alert-report").prepend(result);
+    let firstElement = $("#alert-report").children().first();
+    setTimeout(function (){
+        firstElement.remove();
+    },3000);
+}

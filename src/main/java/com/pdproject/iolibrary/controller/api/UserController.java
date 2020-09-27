@@ -36,7 +36,7 @@ public class UserController {
                 System.out.println(exception.getMessage());
             }
         }
-        return userDTO != null ? ResponseEntity.ok(userDTO) : ResponseEntity.notFound().build();
+        return userDTO != null ? ResponseEntity.ok(userDTO) : ResponseEntity.badRequest().build();
     }
 
     @PostMapping(value = "/insert")

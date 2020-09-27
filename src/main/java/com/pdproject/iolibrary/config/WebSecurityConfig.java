@@ -33,6 +33,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         // disable crsf
         http.csrf().disable();
 
+        http.headers().defaultsDisabled().disable();
+
         // cho phép tất cả các request truy cập
         http.authorizeRequests().antMatchers("/", "/home", "/login", "/logout", "/403").permitAll();
 

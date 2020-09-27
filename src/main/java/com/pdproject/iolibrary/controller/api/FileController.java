@@ -7,6 +7,7 @@ import com.pdproject.iolibrary.service.FileService;
 import lombok.AllArgsConstructor;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
+import org.springframework.http.CacheControl;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -66,6 +67,7 @@ public class FileController {
             fileName = URLDecoder.decode(fileName, "ISO8859_1");
             return ResponseEntity.ok()
                     .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + fileName)
+                    .cacheControl(CacheControl.empty().cachePublic())
                     .contentType(mediaType)
                     .contentLength(contentLength)
                     .body(new ByteArrayResource(bytesData));
