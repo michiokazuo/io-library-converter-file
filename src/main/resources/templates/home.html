@@ -9,14 +9,10 @@
     <menu th:replace="~{/fragment/app-fragment :: menu}"></menu>
     <main class="container mt-5 mb-5 pt-3 pb-3 rounded shadow bg-white">
         <div class="row">
-            <div class="col-md-4 border border-left-0 border-top-0 border-bottom-0">
-                <div class="p-2 rounded shadow-sm mb-2">
+            <div class="col-md-4 border border-left-0 border-top-0 border-bottom-0" id="nav-user">
+                <div class="user-info p-2 rounded shadow-sm" id="user-info">
                     <span class="badge badge-warning mr-3">Your are not login !!</span>
                     <a href="/login" class="badge badge-success">sign in</a>
-                </div>
-                <div class="user-info p-2 rounded shadow-sm">
-                    <img src="logo.jpg" class="rounded-circle" alt="" width="50px">
-                    <span class="ml-2 text-success">Minh Vu</span>
                 </div>
                 <div class="list-file mt-3 p-2 rounded shadow-sm">
                     <div class="bar-title d-flex justify-content-between" data-toggle="collapse" data-target="#collapseFiles" aria-expanded="false" aria-controls="collapseExample">
@@ -25,31 +21,8 @@
                     </div>
                     <div class="collapse" id="collapseFiles">
                         <hr>
-                        <ul class="nav nav-tabs flex-column">
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">
-                                    <i class="far fa-file-pdf text-danger"></i>
-                                    <span class="ml-2 text-dark">filename.pdf</span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">
-                                    <i class="far fa-file-pdf text-danger"></i>
-                                    <span class="ml-2 text-dark">filename.pdf</span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">
-                                    <i class="far fa-file-pdf text-danger"></i>
-                                    <span class="ml-2 text-dark">filename.pdf</span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">
-                                    <i class="far fa-file-pdf text-danger"></i>
-                                    <span class="ml-2 text-dark">filename.pdf</span>
-                                </a>
-                            </li>
+                        <ul class="nav nav-tabs flex-column" id="list-data">
+
                         </ul>
                     </div>
                 </div>
@@ -110,5 +83,7 @@
         </div>
     </main>
     <footer th:replace="~{/fragment/app-fragment :: footer}"></footer>
+    <script th:src="@{/js/model/ajax_model_user.js}"></script>
+    <script th:src="@{/js/pages/ajax_page_home.js}"></script>
 </body>
 </html>

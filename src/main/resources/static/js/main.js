@@ -8,8 +8,11 @@ async function ajaxGet(url) {
         url: URL_API + url,
         timeout: 30000,
         cache: false,
-        success: function (result) {
-            rs = result;
+        success: function (result, textStatus, xhr) {
+            rs = {
+                data : result,
+                status : xhr.status
+            }
         }
     });
     return rs;
@@ -23,8 +26,11 @@ async function ajaxPost(url, data) {
         url: URL_API + url,
         timeout: 30000,
         contentType: "application/json",
-        success: function (result) {
-            rs = result
+        success: function (result, textStatus, xhr) {
+            rs = {
+                data : result,
+                status : xhr.status
+            }
         }
     });
     return rs;
@@ -59,8 +65,11 @@ async function ajaxDelete(url, data) {
         url: URL_API + url,
         timeout: 30000,
         contentType: "application/json",
-        success: function (result) {
-            rs = result
+        success: function (result, textStatus, xhr) {
+            rs = {
+                data : result,
+                status : xhr.status
+            }
         }
     })
     return rs;
@@ -87,7 +96,6 @@ async function ajaxUploadFile(url, file) {
 
 async function ajaxUploadFormData(url, formData) {
     let rs = null;
-    let status = null;
     await $.ajax({
         type: "POST",
         url: url,
@@ -97,16 +105,18 @@ async function ajaxUploadFormData(url, formData) {
         enctype: "multipart/form-data",
         processData: false,
         success: function (result, textStatus, xhr) {
-            rs = result;
-            status = xhr.status;
+            rs = {
+                data : result,
+                status : xhr.status
+            }
         }
     });
-    return {result : rs, status : status};
+    return rs;
 }
 
 function viewError(selector, text) {
     $(selector).addClass("is-invalid");
-    $(selector).siblings(".invalid-feedback").html(text+". Mời nhập lại!");
+    $(selector).siblings(".invalid-feedback").html(text+". Enter again!");
 }
 
 function hiddenError(selector) {
@@ -125,6 +135,44 @@ function checkData(selector, textError){
     // trả về một đối tượng có 2 thuộc tính val và check
     // val sẽ mang giá trị của biến val
     // check sẽ mang giá trị của biến check
+    return {val, check};
+}
+
+function checkEmail(selector, textError){
+    let val = $(selector).val();
+    let check = false;
+    const regex_email = /^[a-z][a-z0-9_\.]{5,32}@[a-z0-9]{2,}(\.[a-z0-9]{2,4}){1,2}$/;
+    if (val.length > 0 && regex_email.test(val)){
+        check = true;
+        hiddenError(selector);
+    }else {
+        viewError(selector, textError);
+    }
+    return {val, check};
+}
+
+function checkPassword(selector, textError){
+    let val = $(selector).val();
+    let check = false;
+    const regex_password = /^(?=.*\d)(?=.*[a-zA-Z]).{8,}$/;
+    if (val.length > 0 && regex_password.test(val)){
+        check = true;
+        hiddenError(selector);
+    }else {
+        viewError(selector, textError);
+    }
+    return {val, check};
+}
+
+function checkPasswordConfirm(selector, password,textError){
+    let val = $(selector).val();
+    let check = false;
+    if (val.length > 0 && val === password){
+        check = true;
+        hiddenError(selector);
+    }else {
+        viewError(selector, textError);
+    }
     return {val, check};
 }
 

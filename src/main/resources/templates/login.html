@@ -19,7 +19,7 @@
                     <form>
                         <div class="form-group">
                             <label for="email-forgot-password" class="col-form-label">Your email :</label>
-                            <input type="email" class="form-control" id="email-forgot-password" placeholder="Enter email">
+                            <input type="email" class="form-control" id="email-forgot-password" placeholder="Enter email" required>
                             <div class="invalid-feedback"></div>
                         </div>
                     </form>
@@ -46,30 +46,29 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="name-sign-up" class="col-form-label">Name :</label>
-                                    <input type="text" class="form-control" id="name-sign-up" placeholder="Enter your name">
-                                    <div class="invalid-feedback">Hãy nhập email</div>
+                                    <input type="text" class="form-control" id="name-sign-up" placeholder="Enter your name" required>
+                                    <div class="invalid-feedback"></div>
                                 </div>
                                 <div class="form-group">
                                     <label for="email-sign-up" class="col-form-label">Email :</label>
-                                    <input type="email" class="form-control" id="email-sign-up" placeholder="Enter email">
-                                    <div class="invalid-feedback">Hãy nhập email</div>
+                                    <input type="email" class="form-control" id="email-sign-up" placeholder="Enter email" required>
+                                    <div class="invalid-feedback"></div>
                                 </div>
                                 <div class="form-group">
                                     <label for="password-sign-up" class="col-form-label">Password :</label>
-                                    <input type="password" class="form-control" id="password-sign-up" placeholder="Enter password">
-                                    <div class="invalid-feedback">Hãy nhập email</div>
+                                    <input type="password" class="form-control" id="password-sign-up" placeholder="Enter password" required>
+                                    <div class="invalid-feedback"></div>
                                 </div>
                                 <div class="form-group">
                                     <label for="password-confirm-sign-up" class="col-form-label">Confirm password :</label>
-                                    <input type="password" class="form-control" id="password-confirm-sign-up" placeholder="Enter password again">
-                                    <div class="invalid-feedback">Hãy nhập email</div>
+                                    <input type="password" class="form-control" id="password-confirm-sign-up" placeholder="Enter password again" required>
+                                    <div class="invalid-feedback"></div>
                                 </div>
-                            </div>
                             </div>
                             <div class="col-md-6">
                                 <label>Avatar</label>
                                 <div class="custom-file">
-                                    <input type="file" class="custom-file-input" id="avatar" onchange="reloadImage()" accept="image/*">
+                                    <input type="file" class="custom-file-input" id="avatar" onchange="reloadImage()" accept="image/*" required>
                                     <div class="invalid-feedback"></div>
                                     <label for="avatar" class="custom-file-label">Select Avatar</label>
                                 </div>
@@ -118,6 +117,8 @@
         </form>
     </main>
     <footer th:replace="~{/fragment/app-fragment :: footer}"></footer>
+    <script th:src="@{/js/model/ajax_model_user.js}"></script>
+    <script th:src="@{/js/model/ajax_mail_sender.js}"></script>
     <script th:src="@{/js/pages/ajax_page_login.js}"></script>
 </body>
 </html>
