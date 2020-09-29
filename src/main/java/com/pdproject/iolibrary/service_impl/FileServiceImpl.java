@@ -2,6 +2,7 @@ package com.pdproject.iolibrary.service_impl;
 
 import com.pdproject.iolibrary.converter.Converter;
 import com.pdproject.iolibrary.dto.FileDTO;
+import com.pdproject.iolibrary.model.Base;
 import com.pdproject.iolibrary.model.FileIO;
 import com.pdproject.iolibrary.repository.FileIORepository;
 import com.pdproject.iolibrary.repository.UserRepository;
@@ -10,6 +11,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.ParseException;
@@ -42,6 +46,7 @@ public class FileServiceImpl implements FileService {
     @Override
     public List<FileDTO> findAll(String email) {
         return email == null ? null : userRepository.findByEmailAndEnabledIsTrue(email).getFileIOList()
+                .stream().filter(Base::getEnabled).collect(Collectors.toList())
                 .stream().map(file -> {
                     try {
                         return converter.toDTO(file);
@@ -78,7 +83,7 @@ public class FileServiceImpl implements FileService {
         if (userId == null) return null;
 
         return fileIORepository.findAll(Sort.by(isASC ? Sort.Direction.ASC : Sort.Direction.DESC, field))
-                .stream().filter(f -> (f.getCreateBy() != null && f.getCreateBy().getId().equals(userId))).collect(Collectors.toList())
+                .stream().filter(f -> (f.getCreateBy() != null && f.getCreateBy().getId().equals(userId)) && f.getEnabled()).collect(Collectors.toList())
                 .stream().map(file -> {
                     try {
                         return converter.toDTO(file);
@@ -113,9 +118,9 @@ public class FileServiceImpl implements FileService {
 
         if (id != null) {
             FileIO fileIO = fileIORepository.findByIdAndEnabledIsTrue(id);
-            if (fileIO.getCreateBy().getId().equals(userId)) {
+            if (fileIO != null && fileIO.getCreateBy().getId().equals(userId)) {
                 fileIO.setEnabled(false);
-
+                fileIORepository.save(fileIO);
                 rs = true;
             }
 

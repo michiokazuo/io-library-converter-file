@@ -42,7 +42,7 @@ public class MailController {
         try {
             FileDTO fileDTO = fileService.findById(id);
             if (fileDTO == null) return ResponseEntity.badRequest().build();
-            sendEmail(email, "LINK_SHARE_FILE", "http://localhost:8080/" + fileDTO.getUrlDownload());
+            sendEmail(email, "LINK_SHARE_FILE", "http://localhost:8080" + fileDTO.getUrlDownload());
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().build();

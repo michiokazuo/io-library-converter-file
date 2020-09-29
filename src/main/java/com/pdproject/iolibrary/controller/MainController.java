@@ -39,8 +39,8 @@ public class MainController {
         return "convert_file";
     }
 
-    @GetMapping("/api/v1/public/my-file")
+    @GetMapping("/your-file")
     public String myFile() {
-        return "my_file";
+        return "your_file";
     }
 }
