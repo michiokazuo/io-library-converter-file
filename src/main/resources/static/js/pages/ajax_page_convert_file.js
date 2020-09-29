@@ -248,20 +248,21 @@ function confirmShareFile() {
             let formData = new FormData();
             formData.append("email", valEmail);
 
+            let str = "Share Failed. Please share file again!!!";
+            let check = false;
+
             await share(fileDTO.id, formData).then(function (rs) {
-                let str = "";
 
                 if (rs.status === 200) {
                     str = "Share Completed";
-                } else {
-                    str = "Share Failed. Please share file again!!!"
+                    check = true;
                 }
 
-                alert(str);
             }).catch(function (e) {
                 console.log(e);
             });
 
+            alertReport(check, str);
             $("#share-file").modal("hide");
         }
 

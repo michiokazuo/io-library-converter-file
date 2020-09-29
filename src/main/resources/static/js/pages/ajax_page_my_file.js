@@ -94,20 +94,21 @@ function confirmShareFile() {
             let formData = new FormData();
             formData.append("email", valEmail);
 
+            let str = "Share Failed. Please share file again!!!";
+            let check = false;
+
             await share(file.id, formData).then(function (rs) {
-                let str = "";
 
                 if (rs.status === 200) {
                     str = "Share Completed";
-                } else {
-                    str = "Share Failed. Please share file again!!!"
+                    check = true;
                 }
 
-                alert(str);
             }).catch(function (e) {
                 console.log(e);
             });
 
+            alertReport(check, str);
             $("#share-file").modal("hide");
         }
     });
@@ -125,23 +126,24 @@ function confirmDeleteFile() {
     btnDelete.click(async function () {
         file = listFile[indexFile - 0];
 
+        let str = "Delete Failed. Please delete file again!!!";
+        let check = false;
+
         await deleteF(file.id, file).then(function (rs) {
-            let str = "";
 
             if (rs.status === 200) {
                 str = "Delete Completed";
+                check= true;
                 listFile = listFile.filter(function (data, index) {
                     return index !== (indexFile - 0);
                 });
-            } else {
-                str = "Delete Failed. Please delete file again!!!"
             }
 
-            alert(str);
         }).catch(function (e) {
             console.log(e);
         });
 
+        alertReport(check, str);
         $("#delete-file").modal("hide");
         viewMyFile();
     })
