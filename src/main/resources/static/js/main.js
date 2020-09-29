@@ -1,3 +1,35 @@
+function checkData(selector, regex, textError) {
+    let val = $(selector).val().trim();
+    let check = false;
+    if (val.length > 0 && regex.test(val)) {
+        check = true;
+        hiddenError(selector);
+    } else {
+        viewError(selector, textError);
+    }
+
+    return {val, check};
+}
+
+function dataFilter(list) {
+    for (const p of list) {
+        for (const pp in p) {
+            if (typeof pp !== "boolean")
+                p[pp] = p[pp] ? p[pp] : "";
+        }
+    }
+    return list;
+}
+
+function viewError(selector, text) {
+    $(selector).addClass("is-invalid");
+    $(selector).siblings(".invalid-feedback").html(text + ". Mời nhập lại!");
+}
+
+function hiddenError(selector) {
+    $(selector).removeClass("is-invalid");
+}
+
 const URL_API = "/api/v1";
 
 async function ajaxGet(url) {

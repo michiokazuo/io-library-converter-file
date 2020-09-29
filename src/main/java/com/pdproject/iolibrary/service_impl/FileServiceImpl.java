@@ -10,6 +10,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -30,11 +32,6 @@ public class FileServiceImpl implements FileService {
     @Override
     public FileIO downFile(Integer id) {
         return (id == null || id < 0) ? null : fileIORepository.findByIdAndEnabledIsTrue(id);
-    }
-
-    @Override
-    public boolean shareFiles(String email, Integer id) {
-        return false;
     }
 
     @Override
@@ -93,6 +90,23 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
+    public boolean updateFile(Integer id) throws SQLException {
+        boolean rs = false;
+
+        if (id != null) {
+            FileIO fileIO = fileIORepository.findByIdAndEnabledIsTrue(id);
+            if (fileIO != null) {
+                fileIO.setModifyDate(new Timestamp(new Date().getTime()));
+
+                rs = true;
+            }
+
+        }
+
+        return rs;
+    }
+
+    @Override
     public boolean deleteFile(String email, Integer id) {
         Integer userId = userRepository.findByEmailAndEnabledIsTrue(email).getId();
         boolean rs = false;
@@ -124,6 +138,4 @@ public class FileServiceImpl implements FileService {
     public byte[] getContentFile(Integer id) {
         return Objects.requireNonNull(fileIORepository.findByIdAndEnabledIsTrue(id)).getContent();
     }
-    // convert pdf to
-    // doc, docx, ppt, pptx, xls, xlsx, encrypt, decrypt, compress
 }

@@ -8,6 +8,10 @@
     <script type="text/javascript" src="https://apis.google.com/js/api.js"></script>
 </head>
 <body>
+<div id="format" th:if="${fromFormat != null && toFormat != null}" class="d-none">
+    <span id="fromFormat" class="d-none" th:text="${fromFormat}"></span>
+    <span id="toFormat" class="d-none" th:text="${toFormat}"></span>
+</div>
 <menu th:replace="~{/fragment/app-fragment :: menu}"></menu>
 <main class="mt-5 mb-5 pt-3 pb-3 rounded shadow">
     <div class="modal fade" id="content-file" tabindex="-1" role="dialog" aria-labelledby="content-file"
@@ -23,7 +27,7 @@
                 <div class="modal-body form-custom">
                     <div class="row h-100">
                         <iframe
-                                src='https://view.officeapps.live.com/op/embed.aspx?src=https://v2.convertapi.com/d/01a2a96873dea8941c12c907447a5046/Example%20Paper.xlsx'
+                                src='https://docs.google.com/gview?url=https://v2.convertapi.com/d/dc84f7488e81dcde935b57d41e291590/L2-Tac-tu.pptx&embedded=true'
                                 width='100%' height='100%' frameborder='0'></iframe>
                     </div>
                 </div>
@@ -102,8 +106,11 @@
                         <option value="png">Image</option>
                         <option value="pptx">PowerPoint</option>
                         <option value="xlsx">Excel</option>
-                        <option value="docs">Word</option>
+                        <option value="docx">Word</option>
                     </select>
+                    <div class="invalid-feedback">
+                        Bạn chưa chon dinh dang nguon.
+                    </div>
                 </div>
                 <div class="col-sm-6 text-left left">
                     <label for="destination-format-select">
@@ -121,6 +128,9 @@
                         <option value="xlsx">Excel</option>
                         <option value="docs">Word</option>
                     </select>
+                    <div class="invalid-feedback">
+                        Bạn chưa chon dinh dang file.
+                    </div>
                 </div>
             </div>
         </div>
@@ -161,13 +171,19 @@
                         </div>
 
                         <div class="file-name w-100 d-flex justify-content-center align-items-center mt-2">
-                            <div class="input col-sm-3">
+                            <div class="input col-md-3">
                                 <input class="form-control mb-1" type="text" placeholder="File name ..." id="file-name"
                                        readonly>
+                                <div class="invalid-feedback">
+                                    Bạn chưa chon file.
+                                </div>
                                 <input class="form-control d-none" type="text" placeholder="Password ..." id="password">
+                                <div class="invalid-feedback">
+                                    Bạn chưa điền password.
+                                </div>
                             </div>
 
-                            <div class="col-sm-2">
+                            <div class="col-md-2">
                                 <button type="button" class="btn btn-primary w-100" data-toggle="modal"
                                         data-target="#modal-product" id="btn-convert">
                                     <i class="fas fa-exchange-alt"></i>
@@ -201,7 +217,7 @@
                         <button type="button" class="btn btn-success m-1" data-toggle="modal"
                                 data-target="#content-file" id="btn-view"><i
                                 class="fas fa-eye"></i></i>
-                            Xem
+                            Xem trước
                         </button>
                         <button type="button" class="btn btn-warning m-1 share-file" data-toggle="modal"
                                 data-target="#share-file"><i

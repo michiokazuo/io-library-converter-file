@@ -1,17 +1,17 @@
 let selectFormatFrom, selectFormatTo, fileConvert, btnFileLocal, btnFileGoogleDrive, textFileNameFrom,
     textPassword, btnConvert, textFileNameTo, textEmailTo;
 let listFormat = [
-    {"text": "PDF", "val": "pdf"},
-    {"text": "Image", "val": "png"},
-    {"text": "PowerPoint", "val": "pptx"},
-    {"text": "Excel", "val": "xlsx"},
-    {"text": "Word", "val": "docs"}
+    {"text": "PDF", "val": "pdf", type : ""},
+    {"text": "Image", "val": "png", type : ""},
+    {"text": "PowerPoint", "val": "pptx", type : ""},
+    {"text": "Excel", "val": "xlsx", type : ""},
+    {"text": "Word", "val": "docx", type : ""}
 ];
 let pdf = [
-    {"text": "compress", "val": "compress"},
-    {"text": "decompress", "val": "decompress"},
-    {"text": "decrypt", "val": "decrypt"},
-    {"text": "encrypt", "val": "encrypt"}
+    {"text": "compress", "val": "compress", type : ""},
+    {"text": "decompress", "val": "decompress", type : ""},
+    {"text": "decrypt", "val": "decrypt", type : ""},
+    {"text": "encrypt", "val": "encrypt", type : ""}
 ];
 
 $(function () {
@@ -35,20 +35,20 @@ $(function () {
         fileConvert.click();
     })
 
+    if (selectFormatTo.val() === "" || selectFormatFrom.val() === ""){
+        $(".loading").removeClass("hidden");
+    }
+
     btnFileGoogleDrive.click(function () {
         // The Browser API key obtained from the Google API Console.
         // Replace with your own Browser API key, or your own key.
-        // var developerKey = 'AIzaSyDtAzWsaO1-phtipZkgakFuVexsM6V4qU0';
+        var developerKey = 'AIzaSyCSLBQVWyGIqIzieQDqvN6RtFRgOz57-mA';
 
         // The Client ID obtained from the Google API Console. Replace with your own Client ID.
-        // var clientId = "637109986363-j4jh5r54q7gdqda01pbt10lfndphki57.apps.googleusercontent.com"
+        var clientId = "1060024421170-l6t9ngeqnaohi0c3ijbkcqcjrtq312ns.apps.googleusercontent.com"
 
         // Replace with your own project number from console.developers.google.com.
         // See "Project number" under "IAM & Admin" > "Settings"
-        // var appId = "637109986363";
-
-        var developerKey = 'AIzaSyCSLBQVWyGIqIzieQDqvN6RtFRgOz57-mA';
-        var clientId = "1060024421170-l6t9ngeqnaohi0c3ijbkcqcjrtq312ns.apps.googleusercontent.com"
         var appId = "1060024421170";
 
         // Scope to use to access user's Drive items.
@@ -57,12 +57,14 @@ $(function () {
         var pickerApiLoaded = false;
         var oauthToken;
 
+        let s;
+
         loadPicker();
 
         // Use the Google API Loader script to load the google.picker script.
         function loadPicker() {
-            gapi.load('auth', { 'callback': onAuthApiLoad });
-            gapi.load('picker', { 'callback': onPickerApiLoad });
+            gapi.load('auth', {'callback': onAuthApiLoad});
+            gapi.load('picker', {'callback': onPickerApiLoad});
         }
 
         function onAuthApiLoad() {
@@ -91,7 +93,7 @@ $(function () {
         function createPicker() {
             if (pickerApiLoaded && oauthToken) {
                 var view = new google.picker.View(google.picker.ViewId.DOCS);
-                view.setMimeTypes("image/png,image/jpeg,image/jpg");
+                view.setMimeTypes("image/png");
                 var picker = new google.picker.PickerBuilder()
                     .enableFeature(google.picker.Feature.NAV_HIDDEN)
                     .enableFeature(google.picker.Feature.MULTISELECT_ENABLED)
@@ -108,18 +110,49 @@ $(function () {
 
         // A simple callback implementation.
         function pickerCallback(data) {
-            if (data.action == google.picker.Action.PICKED) {
-                console.log(data.docs);
-                var fileId = data.docs[0].id;
-                alert('The user selected: ' + fileId);
+            if (data.action === google.picker.Action.PICKED) {
+                fileId = data.docs[0].id;
+                fileName = data.docs[0].name;
+                fileType = data.docs[0].mimeType;
+                console.log(data.docs[0])
+                getContentFile(fileId, fileName, fileType);
             }
         }
-    })
+
+        function fetchBlob(url, callback) {
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', url);
+            xhr.responseType = 'blob';
+            xhr.setRequestHeader("Authorization", 'Bearer ' + oauthToken);
+            xhr.onload = function () {
+                console.log("Got response");
+                callback(this.response);
+            };
+            xhr.onerror = function () {
+                console.log('Failed to fetch ' + url);
+            };
+            xhr.send();
+        }
+
+        /**
+         * @param {String} id Google drive fileId
+         */
+        function getContentFile(id, name, type) {
+            fetchBlob('https://www.googleapis.com/drive/v3/files/' + id + '?alt=' + type, function (data) {
+                s = new File([new Blob([data], {type: type})], name, {
+                    type: type,
+                    lastModified: Date.now()
+                });
+
+                console.log(s);
+            });
+        }
+    });
 
     showSelectOption(selectFormatFrom, listFormat);
     showSelectOption(selectFormatTo, listFormat.concat(pdf));
     chooseFormat();
-
+    convertFile();
 });
 
 function showSelectOption(element, list) {
@@ -192,9 +225,9 @@ function convertFile() {
         $(".loading").removeClass("hidden");
 
 
-        $('.loading').addClass("hidden");
-        $('.result').removeClass("hidden");
-        selectFormatFrom.prop("disabled", false);
-        selectFormatTo.prop("disabled", false);
+        // $('.loading').addClass("hidden");
+        // $('.result').removeClass("hidden");
+        // selectFormatFrom.prop("disabled", false);
+        // selectFormatTo.prop("disabled", false);
     })
 }

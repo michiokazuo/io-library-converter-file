@@ -10,8 +10,6 @@ import java.util.List;
 public interface FileService {
     FileIO downFile(Integer id) throws SQLException;
 
-    boolean shareFiles(String email, Integer id) throws SQLException;
-
     FileDTO findById(Integer id) throws Exception;
 
     List<FileDTO> findAll(String email) throws SQLException;
@@ -19,6 +17,8 @@ public interface FileService {
     List<FileDTO> search(String fileName, Date startDate, Date endDate, String email) throws SQLException;
 
     List<FileDTO> sortBy(String field, boolean isASC, String email) throws SQLException;
+
+    boolean updateFile(Integer id) throws SQLException;
 
     boolean deleteFile(String email, Integer id) throws SQLException;
 
