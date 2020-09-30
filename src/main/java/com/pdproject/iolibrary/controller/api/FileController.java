@@ -24,6 +24,7 @@ import java.security.Principal;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -105,13 +106,12 @@ public class FileController {
         return ResponseEntity.badRequest().build();
     }
 
-    @GetMapping("/search/{file-name}/{start-date}/{end-date}")
+    @PostMapping("/search")
     public ResponseEntity<List<FileDTO>> search(Authentication authentication,
-                                                @PathVariable("file-name") String fileName,
-                                                @PathVariable("start-date") String startDate,
-                                                @PathVariable("end-date") String endDate) {
+                                                @RequestParam(name = "file-name", required = false) String fileName,
+                                                @RequestParam(name = "start-date", required = false) Long startDate,
+                                                @RequestParam(name = "end-date", required = false) Long endDate) {
         List<FileDTO> fileDTOList = null;
-        SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
         String email = null;
         try {
             User user = (User) authentication.getPrincipal();
@@ -122,7 +122,8 @@ public class FileController {
         }
         if (email != null) {
             try {
-                fileDTOList = fileService.search(fileName, dateFormat.parse(startDate), dateFormat.parse(endDate), email);
+                fileDTOList = fileService.search(fileName, startDate == null ? null : new Date(startDate)
+                        , endDate == null ? null : new Date(endDate), email);
             } catch (Exception throwables) {
                 return ResponseEntity.badRequest().build();
             }
@@ -132,10 +133,10 @@ public class FileController {
         return fileDTOList != null ? ResponseEntity.ok(fileDTOList) : ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/sort-by/{field}/{isASC}")
+    @PostMapping("/sort-by")
     public ResponseEntity<List<FileDTO>> sortBy(Authentication authentication,
-                                                @PathVariable(name = "field") String field,
-                                                @PathVariable(name = "isASC") String isASC) {
+                                                @RequestParam(name = "field", required = false) String field,
+                                                @RequestParam(name = "isASC", required = false) String isASC) {
         List<FileDTO> fileDTOList = null;
         String email = null;
         try {
@@ -147,31 +148,18 @@ public class FileController {
         }
         if (email != null) {
             try {
-                if (isASC.equals("true") || isASC.equals("false")) {
+                if (field != null && isASC != null) {
                     fileDTOList = fileService.sortBy(field, Boolean.parseBoolean(isASC), email);
                 } else {
                     fileDTOList = fileService.findAll(email);
                 }
-            } catch (Exception throwables) {
+            } catch (Exception e) {
                 return ResponseEntity.badRequest().build();
             }
         } else {
             return ResponseEntity.badRequest().build();
         }
         return fileDTOList != null ? ResponseEntity.ok(fileDTOList) : ResponseEntity.noContent().build();
-    }
-
-    @GetMapping("/print-file")
-    public ResponseEntity printFile() {
-
-        try {
-
-        } catch (Exception e) {
-            e.printStackTrace();
-
-        }
-
-        return null;
     }
 
     @DeleteMapping("/delete-file/{id}")

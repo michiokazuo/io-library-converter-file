@@ -1,16 +1,3 @@
-function checkData(selector, regex, textError) {
-    let val = $(selector).val().trim();
-    let check = false;
-    if (val.length > 0 && regex.test(val)) {
-        check = true;
-        hiddenError(selector);
-    } else {
-        viewError(selector, textError);
-    }
-
-    return {val, check};
-}
-
 function dataFilter(list) {
     for (const p of list) {
         for (const pp in p) {
@@ -42,8 +29,8 @@ async function ajaxGet(url) {
         cache: false,
         success: function (result, textStatus, xhr) {
             rs = {
-                data : result,
-                status : xhr.status
+                data: result,
+                status: xhr.status
             }
         }
     });
@@ -60,8 +47,8 @@ async function ajaxPost(url, data) {
         contentType: "application/json",
         success: function (result, textStatus, xhr) {
             rs = {
-                data : result,
-                status : xhr.status
+                data: result,
+                status: xhr.status
             }
         }
     });
@@ -99,8 +86,8 @@ async function ajaxDelete(url, data) {
         contentType: "application/json",
         success: function (result, textStatus, xhr) {
             rs = {
-                data : result,
-                status : xhr.status
+                data: result,
+                status: xhr.status
             }
         }
     })
@@ -138,8 +125,8 @@ async function ajaxUploadFormData(url, formData) {
         processData: false,
         success: function (result, textStatus, xhr) {
             rs = {
-                data : result,
-                status : xhr.status
+                data: result,
+                status: xhr.status
             }
         }
     });
@@ -148,20 +135,20 @@ async function ajaxUploadFormData(url, formData) {
 
 function viewError(selector, text) {
     $(selector).addClass("is-invalid");
-    $(selector).siblings(".invalid-feedback").html(text+". Enter again!");
+    $(selector).siblings(".invalid-feedback").html(text + ". Enter again!");
 }
 
 function hiddenError(selector) {
     $(selector).removeClass("is-invalid");
 }
 
-function checkData(selector, textError){
-    let val = $(selector).val();
+function checkData(selector, textError) {
+    let val = $(selector).val().trim();
     let check = false;
-    if (val.length > 0){
+    if (val.length > 0) {
         check = true;
         hiddenError(selector);
-    }else {
+    } else {
         viewError(selector, textError);
     }
     // trả về một đối tượng có 2 thuộc tính val và check
@@ -170,51 +157,51 @@ function checkData(selector, textError){
     return {val, check};
 }
 
-function checkEmail(selector, textError){
+function checkEmail(selector, textError) {
     let val = $(selector).val();
     let check = false;
     const regex_email = /^[a-z][a-z0-9_\.]{5,32}@[a-z0-9]{2,}(\.[a-z0-9]{2,4}){1,2}$/;
-    if (val.length > 0 && regex_email.test(val)){
+    if (val.length > 0 && regex_email.test(val)) {
         check = true;
         hiddenError(selector);
-    }else {
+    } else {
         viewError(selector, textError);
     }
     return {val, check};
 }
 
-function checkPassword(selector, textError){
+function checkPassword(selector, textError) {
     let val = $(selector).val();
     let check = false;
     const regex_password = /^(?=.*\d)(?=.*[a-zA-Z]).{8,}$/;
-    if (val.length > 0 && regex_password.test(val)){
+    if (val.length > 0 && regex_password.test(val)) {
         check = true;
         hiddenError(selector);
-    }else {
+    } else {
         viewError(selector, textError);
     }
     return {val, check};
 }
 
-function checkPasswordConfirm(selector, password,textError){
+function checkPasswordConfirm(selector, password, textError) {
     let val = $(selector).val();
     let check = false;
-    if (val.length > 0 && val === password){
+    if (val.length > 0 && val === password) {
         check = true;
         hiddenError(selector);
-    }else {
+    } else {
         viewError(selector, textError);
     }
     return {val, check};
 }
 
-function alertReport(isSuccess,text){
+function alertReport(isSuccess, text) {
     let result = `<div class="alert alert-${isSuccess ? "success" : "danger"} animate-report">
                     <strong>!</strong> ${text}
                   </div>`;
     $("#alert-report").prepend(result);
     let firstElement = $("#alert-report").children().first();
-    setTimeout(function (){
+    setTimeout(function () {
         firstElement.remove();
-    },3000);
+    }, 3000);
 }
