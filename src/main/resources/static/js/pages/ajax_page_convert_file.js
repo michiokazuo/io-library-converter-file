@@ -218,7 +218,7 @@ function chooseFileGGDrive(typeFile) {
         }
 
         function getContentFile(id, name, type) {
-            fetchBlob('https://www.googleapis.com/drive/v3/files/' + id + '?alt=media' , function (data) {
+            fetchBlob('https://www.googleapis.com/drive/v3/files/' + id + '?alt=media', function (data) {
                 console.log(data)
                 file = new File([new Blob([data], {type: type})], name, {
                     type: type,
@@ -290,6 +290,7 @@ function convertFile() {
             formData.append("file", file);
 
             $(".loading").removeClass("hidden");
+            $(".loading > div").removeClass("hidden");
 
             await convert(valSelectFormatTo.toLowerCase(), formData).then(function (rs) {
                 if (rs.status === 200) {
@@ -324,17 +325,19 @@ function convertFile() {
             shareFile();
         }
 
+        $(".loading > div").addClass("hidden");
         $('.loading').addClass("hidden");
         selectFormatFrom.prop("disabled", false);
         selectFormatTo.prop("disabled", false);
-
     })
 }
 
 function checkFormat(e1, e2, m) {
     m.removeClass("hidden");
+    $("#text-alert").removeClass("hidden");
     if (e1.val() !== "" && e2.val() !== "") {
         m.addClass("hidden");
+        $("#text-alert").addClass("hidden");
         return true;
     }
     return false;
