@@ -73,6 +73,9 @@
     <div class="convert-format">
         <div class="bg-dark nav-tabs-bottom container">
             <div class="row no-gutters format-selection">
+                <div class="w-100 text-center hidden" id="text-alert">
+                    You must choose format file before converting.
+                </div>
                 <div class="col-sm-6 text-right right">
                     <label for="source-format-select">
                         From
@@ -178,7 +181,7 @@
                     </label>
                 </form>
                 <div class="loading hidden">
-                    <div class="spinner-border text-danger font-weight-bold" role="status"
+                    <div class="spinner-border text-danger font-weight-bold hidden" role="status"
                          style="z-index: 10;height: 100px; width:100px;">
                         <span class="sr-only">Loading...</span>
                     </div>
