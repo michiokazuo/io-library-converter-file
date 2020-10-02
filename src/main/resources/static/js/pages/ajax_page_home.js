@@ -1,3 +1,19 @@
+let strURL = window.location.href;
+if (strURL.includes("/login")){
+    $("#home").removeClass("active");
+    $("#convert-file").removeClass("active")
+    $("#login").addClass("active");
+}
+if (strURL.includes("/home")){
+    $("#home").addClass("active");
+    $("#convert-file").removeClass("active")
+    $("#login").removeClass("active");
+}
+if (strURL.includes("/convert-file")){
+    $("#home").removeClass("active");
+    $("#convert-file").addClass("active")
+    $("#login").removeClass("active");
+}
 let user = {};
 let navUser, listData, userInfo;
 

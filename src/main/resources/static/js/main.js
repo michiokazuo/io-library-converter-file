@@ -10,7 +10,7 @@ function dataFilter(list) {
 
 function viewError(selector, text) {
     $(selector).addClass("is-invalid");
-    $(selector).siblings(".invalid-feedback").html(text + ". Mời nhập lại!");
+    $(selector).siblings(".invalid-feedback").html(text + ". Enter again!");
 }
 
 function hiddenError(selector) {
